@@ -36,7 +36,7 @@
   ```json
   {
     "email": "test@example.com",
-    "password": "mypassword"
+    "userPassword": "mypassword"
   }
   ```
 - **Success Response**
