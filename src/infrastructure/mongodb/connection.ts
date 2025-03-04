@@ -1,20 +1,30 @@
 import mongoose from "mongoose";
-import {config} from "../../config/config"
 
-const mongoDb = config.mongo.url;
+let isConnected = false; // Track connection status
 
-export const ConnectToDb = async () => {
-  try {
-      if (!mongoDb) {
-          throw new Error("❌ MongoDB URL is empty. Check your environment variables!");
-      }
+export async function ConnectToDb() {
+    if (!process.env.MONGO_URL) {
+        throw new Error("❌ MONGO_URL is not defined. Check your .env.test file.");
+    }
 
-      console.log(`🔗 Connecting to MongoDB: ${mongoDb}`);
-      await mongoose.connect(mongoDb, {});
-      console.log("✅ Successfully connected to MongoDB");
-  } catch (err) {
-      console.error("❌ MongoDB connection error:", err);
-      process.exit(1);
-  }
-};
+    if (mongoose.connection.readyState !== 0) {
+        console.log("⚠️ Using existing MongoDB connection");
+        return;
+    }
 
+    try {
+        console.log(`🔗 Connecting to MongoDB: ${process.env.MONGO_URL}`);
+        await mongoose.connect(process.env.MONGO_URL);
+        console.log("✅ Successfully connected to MongoDB");
+    } catch (error) {
+        console.error("❌ MongoDB connection error:", error);
+    }
+}
+
+export async function DisconnectDb() {
+    if (isConnected) {
+        await mongoose.disconnect();
+        isConnected = false;
+        console.log("🔌 Disconnected from MongoDB");
+    }
+}
