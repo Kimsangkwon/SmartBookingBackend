@@ -2,8 +2,9 @@ import express from "express";
 import dotenv from "dotenv-safe";
 import cors from "cors";
 import dependencies from "./infrastructure/dependencies";
-import userRoutes from "./ports/rest/routes/user";
+import userRoutes, { search } from "./ports/rest/routes/user";
 import eventRoutes from "./ports/rest/routes/events";
+import searchRoutes from "./ports/rest/routes/search";
 
 const app = express();
 
@@ -27,6 +28,7 @@ if (process.env.NODE_ENV !== "test") {
 // Routes
 app.use("/user", userRoutes);
 app.use("/events", eventRoutes);
+app.use("/search", searchRoutes)
 
 // Start server only if not in test mode
 if (process.env.NODE_ENV !== "test") {
