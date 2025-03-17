@@ -36,3 +36,36 @@ export const fetchEventsFromTicketmaster = async (filters: any) => {
         throw new Error("Failed to fetch events");
     }
 };
+
+export const fetchEventsByCategory = async (category: string, size: number = 6) => {
+    try {
+        const params: any = {
+            apikey: config.event_api,
+            size: size,
+            sort: "date,asc",
+            classificationName: category 
+        };
+
+        const response = await axios.get(BASE_URL, { params });
+        return response.data._embedded?.events || [];
+    } catch (error) {
+        console.error(`❌ Error fetching ${category} events:`, error);
+        return [];
+    }
+};
+
+export const fetchMostViewedEvents = async () => {
+    try {
+        const params: any = {
+            apikey: config.event_api,
+            size: 4,
+            sort: "relevance,desc"
+        };
+
+        const response = await axios.get(BASE_URL, { params });
+        return response.data._embedded?.events || [];
+    } catch (error) {
+        console.error("❌ Error fetching most viewed events:", error);
+        return [];
+    }
+};
