@@ -1,4 +1,4 @@
-import { fetchEventsFromTicketmaster } from "../infrastructure/tichetmasterApi";
+import { fetchEventsFromTicketmaster } from "../infrastructure/ticketmasterApi";
 import { Event } from "../infrastructure/mongodb/models/Event";
 
 export const searchEvents = async (filters: any): Promise<Event[]> => {
