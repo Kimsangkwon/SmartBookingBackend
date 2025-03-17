@@ -316,7 +316,69 @@
   }
   ```
 
+## 📌 8️⃣ Get Sports
+
+### 🔹 `GET /sports`
+
+- **Description:** Retrieves sports events from the Ticketmaster API based on filters such as city, date range, sport type, and keyword (team, event name, or venue).
+
+- **Request Example**
+
+  ```http
+  GET /api/sports?city=Toronto&startDate=2025-06-01&endDate=2025-06-30&sportType=Basketball&keyword=Raptors
+  ```
+
+- **Query Parameters (Optional)**
+  | Parameter | Type | Description |
+  |--------------|--------|-------------|
+  | `city` | String | Filters sports events by a specific city (e.g., `Toronto`) |
+  | `startDate` | String | Filters sports events starting from this date (`YYYY-MM-DD`) |
+  | `endDate` | String | Filters sports events up to this date (`YYYY-MM-DD`) |
+  | `sportType` | String | Filters sports events by type (e.g., `Basketball`, `Soccer`) |
+  | `keyword` | String | Filters sports events by team name, event name, or venue |
+
+---
+
+- **Success Response**
+
+  ```json
+  {
+    "sports": [
+      {
+        "id": "78901",
+        "date": "2025-07-05",
+        "dayOfWeek": "Saturday",
+        "time": "15:00:00",
+        "name": "Toronto Raptors vs Lakers",
+        "city": "Toronto",
+        "state": "Ontario",
+        "venue": "Scotiabank Arena",
+        "image": "https://someimage.com/raptors-vs-lakers.jpg"
+      },
+      {
+        "id": "89012",
+        "date": "2025-07-10",
+        "dayOfWeek": "Thursday",
+        "time": "19:00:00",
+        "name": "Blue Jays vs Yankees",
+        "city": "Toronto",
+        "state": "Ontario",
+        "venue": "Rogers Centre",
+        "image": "https://someimage.com/bluejays-vs-yankees.jpg"
+      }
+    ]
+  }
+  ```
+
+- **Error Response**
+  ```json
+  {
+    "error": "Failed to fetch sports events"
+  }
+  ```
+
 ````
+
 
 # 🚀 Additional Information
 
