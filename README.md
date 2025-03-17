@@ -255,6 +255,69 @@
 
 ---
 
+## 📌 7️⃣ Get Concerts
+
+### 🔹 `GET /concerts`
+
+- **Description:** Retrieves concerts from the Ticketmaster API based on filters such as city, date range, genre, and keyword (artist, event name, or venue).
+
+- **Request Example**
+
+  ```http
+  GET /api/concerts?city=Toronto&startDate=2025-06-01&endDate=2025-06-30&genre=Rock&keyword=Coldplay
+  ```
+
+- **Query Parameters (Optional)**
+  | Parameter | Type | Description |
+  |--------------|--------|-------------|
+  | `city` | String | Filters concerts by a specific city (e.g., `Toronto`) |
+  | `startDate` | String | Filters concerts starting from this date (`YYYY-MM-DD`) |
+  | `endDate` | String | Filters concerts up to this date (`YYYY-MM-DD`) |
+  | `genre` | String | Filters concerts by music genre (e.g., `Rock`, `Pop`) |
+  | `keyword` | String | Filters concerts by artist, event name, or venue |
+
+---
+
+- **Success Response**
+
+  ```json
+  {
+    "concerts": [
+      {
+        "id": "12345",
+        "date": "2025-06-18",
+        "dayOfWeek": "Wednesday",
+        "time": "19:30:00",
+        "name": "Coldplay World Tour",
+        "city": "Toronto",
+        "state": "Ontario",
+        "venue": "Rogers Centre",
+        "image": "https://someimage.com/coldplay.jpg"
+      },
+      {
+        "id": "67890",
+        "date": "2025-06-22",
+        "dayOfWeek": "Sunday",
+        "time": "20:00:00",
+        "name": "Imagine Dragons Live",
+        "city": "Toronto",
+        "state": "Ontario",
+        "venue": "Scotiabank Arena",
+        "image": "https://someimage.com/imaginedragons.jpg"
+      }
+    ]
+  }
+  ```
+
+- **Error Response**
+  ```json
+  {
+    "error": "Failed to fetch concerts"
+  }
+  ```
+
+````
+
 # 🚀 Additional Information
 
 ### 📌 Authentication (JWT Token)
@@ -273,6 +336,6 @@ MONGO_PORT=27017
 MONGO_DATABASE=SmartBookingDatabase
 SECRET_KEY=your_secret_key
 EVENT_API_KEY=your_ticketmaster_api_key
-```
+````
 
 ✅ **Ensure these environment variables are set in `.env.local` for the project to function properly.**

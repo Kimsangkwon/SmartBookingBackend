@@ -69,3 +69,36 @@ export const fetchMostViewedEvents = async () => {
         return [];
     }
 };
+
+export const fetchConcerts = async (
+    city?: string,
+    startDate?: string,
+    endDate?: string,
+    genre?: string,
+    keyword?: string,
+    size: number = 100
+) => {
+    try {
+        const params: any = {
+            apikey: config.event_api,
+            size: size,
+            classificationName: "music", 
+            sort: "date,asc" 
+        };
+
+        if (city) params.city = city;
+
+        if (startDate) params.startDateTime = new Date(startDate).toISOString();
+        if (endDate) params.endDateTime = new Date(endDate).toISOString();
+
+        if (genre) params.genre = genre;
+
+        if (keyword) params.keyword = keyword;
+
+        const response = await axios.get(BASE_URL, { params });
+        return response.data._embedded?.events || [];
+    } catch (error) {
+        console.error(`❌ Error fetching concerts:`, error);
+        return [];
+    }
+};
