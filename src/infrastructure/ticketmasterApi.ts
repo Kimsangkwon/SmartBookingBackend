@@ -70,6 +70,16 @@ export const fetchMostViewedEvents = async () => {
     }
 };
 
+const formatDateForTicketmaster = (date: string, isEndDate: boolean = false): string => {
+    const dateObj = new Date(date);
+    if (isEndDate) {
+        dateObj.setHours(23, 59, 59);
+    } else {
+        dateObj.setHours(0, 0, 0);
+    }
+    return dateObj.toISOString().replace(".000Z", "Z");
+};
+
 export const fetchConcerts = async (
     city?: string,
     startDate?: string,
@@ -87,18 +97,47 @@ export const fetchConcerts = async (
         };
 
         if (city) params.city = city;
-
-        if (startDate) params.startDateTime = new Date(startDate).toISOString();
-        if (endDate) params.endDateTime = new Date(endDate).toISOString();
-
+        if (startDate) params.startDateTime = formatDateForTicketmaster(startDate);
+        if (endDate) params.endDateTime = formatDateForTicketmaster(endDate, true);
         if (genre) params.genre = genre;
-
         if (keyword) params.keyword = keyword;
 
         const response = await axios.get(BASE_URL, { params });
         return response.data._embedded?.events || [];
     } catch (error) {
         console.error(`❌ Error fetching concerts:`, error);
+        return [];
+    }
+};
+
+export const fetchSports = async (filters: {
+    city?: string;
+    startDate?: string;
+    endDate?: string;
+    sportType?: string;
+    keyword?: string;
+    size?: number;
+}) => {
+    try {
+        const params: any = {
+            apikey: config.event_api,
+            size: filters.size || 100,
+            classificationName: "sports", 
+            sort: "date,asc"
+        };
+
+        if (filters.city) params.city = filters.city;
+        if (filters.startDate) params.startDateTime = formatDateForTicketmaster(filters.startDate);
+        if (filters.endDate) params.endDateTime = formatDateForTicketmaster(filters.endDate, true);
+        if (filters.sportType) {
+            params.keyword = filters.sportType;
+        }
+        if (filters.keyword) params.keyword = filters.keyword;
+
+        const response = await axios.get(BASE_URL, { params });
+        return response.data._embedded?.events || [];
+    } catch (error) {
+        console.error(`❌ Error fetching sports:`, error);
         return [];
     }
 };

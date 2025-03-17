@@ -7,6 +7,7 @@ import eventRoutes from "./ports/rest/routes/events";
 import searchRoutes from "./ports/rest/routes/search";
 import homeRoutes from "./ports/rest/routes/home";
 import concertRoutes from "./ports/rest/routes/concerts";
+import sportRoutes from "./ports/rest/routes/sports";
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use("/events", eventRoutes);
 app.use("/search", searchRoutes);
 app.use("/home", homeRoutes);
 app.use("/concerts", concertRoutes);
+app.use("/sports",sportRoutes);
 
 // Start server only if not in test mode
 if (process.env.NODE_ENV !== "test") {
