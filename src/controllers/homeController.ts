@@ -1,5 +1,5 @@
 import { fetchEventsByCategory, fetchMostViewedEvents } from "../infrastructure/ticketmasterApi";
-import {HomeEvent} from "../infrastructure/mongodb/models/HomeEvent";
+import {HomeEvent} from "../domain/HomeEvent";
 export const getHomePageEvents = async () => {
     try {
         const mostViewedData = await fetchMostViewedEvents();
