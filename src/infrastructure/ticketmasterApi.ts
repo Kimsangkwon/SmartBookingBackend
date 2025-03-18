@@ -107,7 +107,7 @@ const formatDateForTicketmaster = (date: string, isEndDate: boolean = false): st
 };
 
 /**
- * 🎵 Fetch concerts based on filters
+ * 🎵 Fetch concerts based on optional filters
  * @param {string} city - City name
  * @param {string} startDate - Start date (ISO 8601)
  * @param {string} endDate - End date (ISO 8601)
@@ -140,7 +140,7 @@ export const fetchConcerts = async (city?: string, startDate?: string, endDate?:
 };
 
 /**
- * ⚽ Fetch sports events based on filters
+ * ⚽ Fetch sports events based on optional filters
  * @param {Object} filters - Filtering criteria (city, start date, end date, sport type, keyword)
  * @returns {Array} An array of matching sports events
  */
@@ -163,6 +163,42 @@ export const fetchSports = async (filters: { city?: string; startDate?: string; 
         return response.data._embedded?.events || [];
     } catch (error) {
         console.error(`❌ Error fetching sports:`, error);
+        return [];
+    }
+};
+/**
+ *  Fetch other events based on optional filters
+ * @param {Object} filters - Filtering criteria (city, start date, end date, classification, keyword)
+ * @returns {Array} An array of matching sports events
+ */
+export const fetchOthers = async (
+    city?: string,
+    startDate?: string,
+    endDate?: string,
+    classificationName?: string,
+    keyword?: string,
+    size: number = 100
+) => {
+    try {
+        const params: any = {
+            apikey: config.event_api,
+            size: size,
+            sort: "date,asc",
+        };
+
+        if (city) params.city = city;
+        if (startDate) params.startDateTime = formatDateForTicketmaster(startDate);
+        if (endDate) params.endDateTime = formatDateForTicketmaster(endDate, true);
+        if (classificationName) {
+            params.classificationName = classificationName;
+        } else {
+            params.classificationName = "Arts & Theatre,Film,Family,Comedy,Fairs & Festivals";
+        }        if (keyword) params.keyword = keyword;
+
+        const response = await axios.get(BASE_URL, { params });
+        return response.data._embedded?.events || [];
+    } catch (error) {
+        console.error(`❌ Error fetching other events:`, error);
         return [];
     }
 };
