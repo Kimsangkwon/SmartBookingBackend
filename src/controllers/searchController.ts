@@ -1,5 +1,5 @@
 import { fetchEventsByUserSearchInputs } from "../infrastructure/ticketmasterApi";
-import { Event } from "../infrastructure/mongodb/models/Event";
+import { Event } from "../domain/Event";
 
 export const searchEvents = async (filters: any): Promise<Event[]> => {
     const events = await fetchEventsByUserSearchInputs(filters);

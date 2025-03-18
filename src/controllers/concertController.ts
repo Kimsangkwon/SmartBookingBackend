@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { fetchConcerts } from "../infrastructure/ticketmasterApi";
-import { ConcertEvent } from "../infrastructure/mongodb/models/ConcertEvent";
+import { ConcertEvent } from "../domain/ConcertEvent";
 
 export const getConcerts = async (filters: any): Promise<ConcertEvent[]> => {
     try {
