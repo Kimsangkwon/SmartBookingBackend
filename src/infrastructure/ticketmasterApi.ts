@@ -9,7 +9,7 @@ const BASE_URL = "https://app.ticketmaster.com/discovery/v2/events.json";
  * @param {Object} filters - Filtering criteria (city, postal code, date, keyword)
  * @returns {Array} An array of matching events
  */
-export const fetchEventsFromTicketmaster = async (filters: any) => {
+export const fetchEventsByUserSearchInputs = async (filters: any) => {
     try {
         const params: any = {
             apikey: config.event_api, // API key

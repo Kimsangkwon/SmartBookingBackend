@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import { searchEvents } from "../../../controllers/searchService";
+import { searchEvents } from "../../../controllers/searchController";
 
 const router = Router();
 
