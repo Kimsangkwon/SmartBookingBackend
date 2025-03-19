@@ -337,6 +337,113 @@
   | `sportType` | String | Filters sports events by type (e.g., `Basketball`, `Soccer`) |
   | `keyword` | String | Filters sports events by team name, event name, or venue |
 
+# 📖 SMART BOOKING API Documentation
+
+## 📌 9️⃣ Get Others
+
+### 🔹 `GET /others`
+
+- **Description:**  
+  Retrieves events that do not fall under a specific classification, allowing users to filter out unwanted event categories.
+
+- **Query Parameters (Optional)**
+  | Parameter | Type | Description |
+  |---------------------|--------|-----------------------------------------------------------|
+  | `classificationName` | String | Excludes events matching this classification (e.g., `Sports`, `Music`). |
+
+- **Request Example**
+
+  ```http
+  GET /others?classificationName=Other
+  ```
+
+- **Success Response**
+
+  ```json
+  {
+    "events": [
+      {
+        "id": "1Ad0ZbKGkR7vgsC",
+        "date": "2024-07-01",
+        "dayOfWeek": "Sunday",
+        "time": "10:00:00",
+        "name": "Jimmy Kimmel's Comedy Club Ticket + Hotel Deals",
+        "city": "Las Vegas",
+        "state": "Nevada",
+        "venue": "Jimmy Kimmel's Comedy Club",
+        "image": "https://s1.ticketm.net/dam/a/b46/00337dcc-5bd1-4b00-816c-491561ad4b46_RETINA_PORTRAIT_16_9.jpg",
+        "classificationName": "Arts & Theatre - Comedy - Comedy"
+      }
+    ],
+    "classifications": ["Arts & Theatre - Comedy - Comedy"]
+  }
+  ```
+
+- **Error Response**
+  ```json
+  {
+    "error": "Failed to fetch events"
+  }
+  ```
+
+---
+
+## 📌 🔟 Get Event Details
+
+### 🔹 `GET /eventDetail/:eventId`
+
+- **Description:**  
+  Retrieves detailed information about a specific event using its `eventId`.
+
+- **Path Parameters**
+  | Parameter | Type | Description |
+  |-----------|--------|---------------------------------|
+  | `eventId` | String | The unique ID of the event. |
+
+- **Request Example**
+
+  ```http
+  GET /eventDetail/1A8ZkFJGkdjgopg
+  ```
+
+- **Success Response**(for now it is retreiving raw data)
+
+  ```json
+  {
+    "eventData": {
+        "name": "The Musical Box - 50th Anniversary Of Selling England By The Pound",
+        "type": "event",
+        "id": "1A8ZkFJGkdjgopg",
+        "test": false,
+        "url": "https://www.ticketmaster.ca/the-musical-box-50th-anniversary-of-toronto-ontario-05-31-2025/event/10006226DCD515B5",
+        "locale": "en-us",
+        "images": [
+            {
+                "ratio": "3_2",
+                "url": "https://s1.ticketm.net/dam/a/0b7/c373ca90-c06b-45c0-b085-983181cbf0b7_TABLET_LANDSCAPE_3_2.jpg",
+                "width": 1024,
+                "height": 683,
+                "fallback": false
+            },
+            {
+                "ratio": "3_2",
+                "url": "https://s1.ticketm.net/dam/a/0b7/c373ca90-c06b-45c0-b085-983181cbf0b7_ARTIST_PAGE_3_2.jpg",
+                "width": 305,
+                "height": 203,
+                "fallback": false
+            },
+  ```
+
+- **Error Response**
+
+  ```json
+  {
+    "error": "Event not found"
+  }
+  ```
+
+  **Note:** If an invalid or non-existent `eventId` is used, a `404 Not Found` response will be returned.
+
 ---
 
 - **Success Response**
