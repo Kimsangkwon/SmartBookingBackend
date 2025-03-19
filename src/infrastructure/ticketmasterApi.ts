@@ -2,7 +2,7 @@ import axios from "axios";
 import { config } from "../config/config";
 
 // Base URL for Ticketmaster API
-const BASE_URL = "https://app.ticketmaster.com/discovery/v2/events.json";
+const BASE_URL = "https://app.ticketmaster.com/discovery/v2/events";
 
 /**
  * 🎫 Fetch events from Ticketmaster API based on filters
@@ -200,5 +200,25 @@ export const fetchOthers = async (
     } catch (error) {
         console.error(`❌ Error fetching other events:`, error);
         return [];
+    }
+};
+
+
+export const getEventDetail = async(eventId : any)=> {
+    try {
+        const response = await axios.get(`${BASE_URL}/${eventId}`, {
+            params: { apikey: config.event_api },
+        });
+
+        const event = response.data;
+
+        if (!event) {
+            return null;
+        }
+
+        return event;
+    } catch (error) {
+        console.error("❌ Error fetching event from Ticketmaster:", error);
+        return null;
     }
 };
