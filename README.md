@@ -259,7 +259,7 @@
 
 ### 🔹 `GET /concerts`
 
-- **Description:** Retrieves concerts from the Ticketmaster API based on filters such as city, date range, genre, and keyword (artist, event name, or venue).
+- **Description:** Retrieves concerts from the Ticketmaster API based on filters such as city, date range, genre, and keyword (artist, event name, or venue) and also retrieves most relevent concerts.
 
 - **Request Example**
 
@@ -304,6 +304,52 @@
         "state": "Ontario",
         "venue": "Scotiabank Arena",
         "image": "https://someimage.com/imaginedragons.jpg"
+      }
+    ],
+    "mostViewedConcertEvents": [
+      {
+        "id": "1A9ZkkeGkd1Zepn",
+        "date": "2025-04-04",
+        "dayOfWeek": "Thursday",
+        "time": "20:30:00",
+        "name": "Eagles Live at the Sphere - Suite Reservation",
+        "city": "Las Vegas",
+        "state": "Nevada",
+        "venue": "Sphere",
+        "image": "https://s1.ticketm.net/dam/a/71d/ad124f24-1532-4dae-937f-d32c3340471d_SOURCE"
+      },
+      {
+        "id": "1kAYv-4bGACQ-mL",
+        "date": "2025-04-04",
+        "dayOfWeek": "Thursday",
+        "time": "20:30:00",
+        "name": "Eagles Live at Sphere",
+        "city": "Las Vegas",
+        "state": "Nevada",
+        "venue": "Sphere",
+        "image": "https://s1.ticketm.net/dam/a/71d/ad124f24-1532-4dae-937f-d32c3340471d_SOURCE"
+      },
+      {
+        "id": "1A9ZkA4GkexSvWw",
+        "date": "2025-04-05",
+        "dayOfWeek": "Friday",
+        "time": "20:30:00",
+        "name": "Eagles Live at Sphere",
+        "city": "Las Vegas",
+        "state": "Nevada",
+        "venue": "Sphere",
+        "image": "https://s1.ticketm.net/dam/a/71d/ad124f24-1532-4dae-937f-d32c3340471d_SOURCE"
+      },
+      {
+        "id": "1A9ZkkeGkd1Z3pR",
+        "date": "2025-04-05",
+        "dayOfWeek": "Friday",
+        "time": "20:30:00",
+        "name": "Eagles Live at the Sphere - Suite Reservation",
+        "city": "Las Vegas",
+        "state": "Nevada",
+        "venue": "Sphere",
+        "image": "https://s1.ticketm.net/dam/a/71d/ad124f24-1532-4dae-937f-d32c3340471d_SOURCE"
       }
     ]
   }

@@ -1,23 +1,26 @@
 import { Request, Response } from "express";
-import { fetchConcerts } from "../infrastructure/ticketmasterApi";
+import { fetchConcerts, fetchMostViewedEvents } from "../infrastructure/ticketmasterApi";
 import { ConcertEvent } from "../domain/ConcertEvent";
 
-export const getConcerts = async (filters: any): Promise<ConcertEvent[]> => {
+export const getConcerts = async (filters: any) => {
     try {
         const { city, startDate, endDate, genre, keyword } = filters;
 
-        const events = await fetchConcerts(
+        const concertData = await fetchConcerts(
             city as string | undefined,
             startDate as string | undefined,
             endDate as string | undefined,
             genre as string | undefined,
             keyword as string | undefined
         );
-
-        return events.map((event: any) => ConcertEvent.fromApiResponse(event));
+        const concertEvents = concertData.map((event: any) => ConcertEvent.fromApiResponse(event));
+        const mostViewedConcertData = await fetchMostViewedEvents("music");
+        const mostViewedConcertEvents = mostViewedConcertData.map((event:any)=>ConcertEvent.fromApiResponse(event));
+        
+        return {concertEvents, mostViewedConcertEvents};
     } catch (error) {
         console.error("❌ Error fetching concerts in concertController:", error);
-        throw new Error("Failed to fetch concerts");
+        return{concertEvets:[], mostViewedConcertEvents:[]};
     }
 };
 
