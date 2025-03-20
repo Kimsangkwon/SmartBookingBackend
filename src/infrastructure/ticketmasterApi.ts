@@ -74,11 +74,12 @@ export const fetchEventsByCategory = async (category: string, size: number = 6) 
  * 🔥 Fetch the most viewed events
  * @returns {Array} An array of top 4 most viewed events
  */
-export const fetchMostViewedEvents = async () => {
+export const fetchMostViewedEvents = async (classificationName?:string) => {
     try {
         const params: any = {
             apikey: config.event_api,
             size: 4, // Return only 4 most popular events
+            classificationName: classificationName || "",
             sort: "relevance,desc", // Sort by relevance in descending order
         };
 
