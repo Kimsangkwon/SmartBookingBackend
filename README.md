@@ -530,8 +530,133 @@
   }
   ```
 
-````
+---
 
+## 📌 1️⃣1️⃣ Wishlist (Requires Authentication)
+
+### 🔹 `POST /wishlist`
+
+- **Description:**  
+  Adds an event to the logged-in user's wishlist.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Request Body (JSON)**
+
+  ```json
+  {
+    "eventId": "1A9ZkkeGkd1Zepn",
+    "name": "Eagles Live at the Sphere",
+    "date": "2025-04-04",
+    "image": "https://someimage.com/eagles.jpg",
+    "venue": "Sphere"
+  }
+  ```
+
+- **Success Response**
+
+  ```json
+  {
+    "message": "Event added to wishlist",
+    "wishlist": {
+      "_id": "65ff2e9307ddc42bfa877534",
+      "userId": "65f1d1d6a8a3f2b3c3f9e7b2",
+      "eventId": "1A9ZkkeGkd1Zepn",
+      "name": "Eagles Live at the Sphere",
+      "date": "2025-04-04",
+      "image": "https://someimage.com/eagles.jpg",
+      "venue": "Sphere",
+      "addAt": "2025-03-20T18:01:55.711Z",
+      "__v": 0
+    }
+  }
+  ```
+
+- **Error Response (Unauthorized)**
+  ```json
+  {
+    "message": "No token provided"
+  }
+  ```
+
+---
+
+### 🔹 `GET /wishlist`
+
+- **Description:**  
+  Retrieves all wishlist items for the authenticated user.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Success Response**
+
+  ```json
+  {
+    "wishlist": [
+      {
+        "_id": "65ff2e9307ddc42bfa877534",
+        "userId": "65f1d1d6a8a3f2b3c3f9e7b2",
+        "eventId": "1A9ZkkeGkd1Zepn",
+        "name": "Eagles Live at the Sphere",
+        "date": "2025-04-04",
+        "image": "https://someimage.com/eagles.jpg",
+        "venue": "Sphere",
+        "addAt": "2025-03-20T18:01:55.711Z",
+        "__v": 0
+      }
+    ]
+  }
+  ```
+
+- **Error Response (Unauthorized)**
+  ```json
+  {
+    "message": "No token provided"
+  }
+  ```
+
+---
+
+### 🔹 `DELETE /wishlist/:eventId`
+
+- **Description:**  
+  Removes an event from the user's wishlist using the eventId.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Request Example**
+
+  ```http
+  DELETE /wishlist/1A9ZkkeGkd1Zepn
+  ```
+
+- **Success Response**
+
+  ```json
+  {
+    "message": "Event removed from wishlist"
+  }
+  ```
+
+- **Error Response (Not Found)**
+  ```json
+  {
+    "message": "Event not found in wishlist"
+  }
+  ```
+
+---
+
+📌 **Note:**  
+All wishlist operations require the user to be authenticated. The `userId` is automatically extracted from the JWT token and does not need to be provided manually in the request body.
+
+---
 
 # 🚀 Additional Information
 
@@ -551,6 +676,6 @@ MONGO_PORT=27017
 MONGO_DATABASE=SmartBookingDatabase
 SECRET_KEY=your_secret_key
 EVENT_API_KEY=your_ticketmaster_api_key
-````
+```
 
 ✅ **Ensure these environment variables are set in `.env.local` for the project to function properly.**
