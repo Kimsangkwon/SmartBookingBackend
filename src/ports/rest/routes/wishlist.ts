@@ -1,7 +1,7 @@
 import express, { NextFunction, Response, Request } from "express";
 import { ConnectToDb } from "../../../infrastructure/mongodb/connection";
 import { authenticateToken } from "../middleware/authentication";
-import { createWishlistItem, deleteWishlistItem, getWishlistByUserId } from "infrastructure/mongodb/queries/wishlist";
+import { createWishlistItem, deleteWishlistItem, getWishlistByUserId } from "../../../infrastructure/mongodb/queries/wishlist";
 
 const router = express.Router();
 

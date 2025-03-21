@@ -658,6 +658,136 @@ All wishlist operations require the user to be authenticated. The `userId` is au
 
 ---
 
+## 📌 1️⃣2️⃣ Billing Information (Requires Authentication)
+
+### 🔹 `POST /billing`
+
+- **Description:**  
+  Creates a new billing information entry for the authenticated user.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Request Body (JSON)**
+
+  ```json
+  {
+    "nameOnCard": "John Doe",
+    "cardNumber": "1234567812345678",
+    "expirationDate": "2026-08",
+    "country": "Canada",
+    "addressLine1": "123 Billing St",
+    "addressLine2": "Apt 202",
+    "city": "Toronto",
+    "province": "Ontario",
+    "postalCode": "M5G2C3",
+    "phoneNumber": "123-456-7890"
+  }
+  ```
+
+- **Success Response**
+  ```json
+  {
+    "message": "Billing info created successfully",
+    "billing": {
+      "_id": "66004e12db4b5f87af63fa1a",
+      "userId": "65f1d1d6a8a3f2b3c3f9e7b2",
+      "nameOnCard": "John Doe",
+      "cardNumber": "1234567812345678",
+      "expirationDate": "2026-08",
+      "country": "Canada",
+      "addressLine1": "123 Billing St",
+      "addressLine2": "Apt 202",
+      "city": "Toronto",
+      "province": "Ontario",
+      "postalCode": "M5G2C3",
+      "phoneNumber": "123-456-7890"
+    }
+  }
+  ```
+
+---
+
+### 🔹 `GET /billing`
+
+- **Description:**  
+  Retrieves all billing cards for the authenticated user (with card number partially masked).
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Success Response**
+  ```json
+  {
+    "billingInfos": [
+      {
+        "_id": "66004e12db4b5f87af63fa1a",
+        "nameOnCard": "John Doe",
+        "cardNumber": "**** **** **** 5678",
+        "expirationDate": "2026-08"
+      }
+    ]
+  }
+  ```
+
+---
+
+### 🔹 `PUT /billing/:cardId`
+
+- **Description:**  
+  Updates billing info for the specified card.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Request Body (Partial or Full Update)**
+
+  ```json
+  {
+    "phoneNumber": "987-654-3210"
+  }
+  ```
+
+- **Success Response**
+  ```json
+  {
+    "message": "Billing info updated successfully",
+    "billing": {
+      "_id": "66004e12db4b5f87af63fa1a",
+      ...
+    }
+  }
+  ```
+
+---
+
+### 🔹 `DELETE /billing/:cardId`
+
+- **Description:**  
+  Deletes the billing information by card ID.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Success Response**
+  ```json
+  {
+    "message": "Billing info deleted successfully"
+  }
+  ```
+
+---
+
+📌 **Note:**
+
+- All billing operations require the user to be authenticated.
+- The `userId` is automatically extracted from the JWT token.
+- Card numbers are stored securely and returned only in a masked format during read operations.
+
 # 🚀 Additional Information
 
 ### 📌 Authentication (JWT Token)
