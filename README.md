@@ -383,7 +383,65 @@
   | `sportType` | String | Filters sports events by type (e.g., `Basketball`, `Soccer`) |
   | `keyword` | String | Filters sports events by team name, event name, or venue |
 
-# 📖 SMART BOOKING API Documentation
+  **Request Example**
+
+  ```http
+  GET /sports
+  ```
+
+- **Success Response**
+
+  ```json
+  {
+  "sports": {
+          "sportsEvents": [
+              {
+                  "id": "G5viZbaMNbUUf",
+                  "date": "2024-08-25",
+                  "dayOfWeek": "Saturday",
+                  "time": "13:00:00",
+                  "name": "Preseason Game: New Orleans Saints v Tennessee Titans",
+                  "city": "New Orleans",
+                  "state": "Louisiana",
+                  "venue": "Caesars Superdome ",
+                  "image": "https://s1.ticketm.net/dam/a/86d/0dcfe694-65df-44e1-bb73-0263fdb7f86d_1325401_ARTIST_PAGE_3_2.jpg"
+              },
+              {
+                  "id": "G5eVZb22k9bRL",
+                  "date": "2024-09-29",
+                  "dayOfWeek": "Saturday",
+                  "time": "19:00:00",
+                  "name": "TNA Wrestling",
+                  "city": "Spartanburg",
+                  "state": "South Carolina",
+                  "venue": "The Hall at Spartanburg Memorial Auditorium",
+                  "image": "https://s1.ticketm.net/dam/a/d79/a9f3194a-e475-4427-8bd9-ca935236ed79_RETINA_PORTRAIT_16_9.jpg"
+              },
+    ],
+    "mostViewedSportEvent": [
+            {
+                "id": "G5vYZb2n_2V2d",
+                "date": "2025-04-13",
+                "dayOfWeek": "Saturday",
+                "time": "12:30:00",
+                "name": "SACRAMENTO KINGS VS. PHOENIX SUNS",
+                "city": "Sacramento",
+                "state": "California",
+                "venue": "Golden 1 Center",
+                "image": "https://s1.ticketm.net/dam/a/022/6fdae8b5-6fa8-4793-8829-edef2a77a022_1339671_RETINA_PORTRAIT_3_2.jpg"
+            },
+    ]
+  }
+  ```
+
+- **Error Response**
+  ```json
+  {
+    "error": "Failed to fetch events"
+  }
+  ```
+
+---
 
 ## 📌 9️⃣ Get Others
 
@@ -396,11 +454,16 @@
   | Parameter | Type | Description |
   |---------------------|--------|-----------------------------------------------------------|
   | `classificationName` | String | Excludes events matching this classification (e.g., `Sports`, `Music`). |
+  | `city` | String | Filters sports events by a specific city (e.g., `Toronto`) |
+  | `startDate` | String | Filters sports events starting from this date (`YYYY-MM-DD`) |
+  | `endDate` | String | Filters sports events up to this date (`YYYY-MM-DD`) |
+  | `sportType` | String | Filters sports events by type (e.g., `Basketball`, `Soccer`) |
+  | `keyword` | String | Filters sports events by team name, event name, or venue |
 
 - **Request Example**
 
   ```http
-  GET /others?classificationName=Other
+  GET /others?classificationName=Comedy
   ```
 
 - **Success Response**
@@ -421,7 +484,20 @@
         "classificationName": "Arts & Theatre - Comedy - Comedy"
       }
     ],
-    "classifications": ["Arts & Theatre - Comedy - Comedy"]
+    "mostViewedOtherEvent": [
+      {
+        "id": "1A_Zk7JGkeg1dxD",
+        "date": "2025-03-28",
+        "dayOfWeek": "Thursday",
+        "time": "19:30:00",
+        "name": "Jerry Seinfeld And Jim Gaffigan",
+        "city": "Phoenix",
+        "state": "Arizona",
+        "venue": "PHX Arena (formerly Footprint Center)",
+        "image": "https://s1.ticketm.net/dam/a/c01/09403b0b-95e2-49e2-a310-9d586a455c01_EVENT_DETAIL_PAGE_16_9.jpg",
+        "classificationName": "Arts & Theatre"
+      }
+    ]
   }
   ```
 
