@@ -143,6 +143,8 @@
     "error": "First name must be at least 2 characters"
   }
   ```
+  **📌NOTE**
+  As home route has many requests to Ticketmaster API, it returns an error for too many requests. Because of that there are some delay between the requests, so it take some time (2s) to fetch all the data
 
 ---
 
@@ -188,6 +190,17 @@
         "name": "Coldplay World Tour",
         "images": ["https://someimage.com/coldplay.jpg"],
         "info": "Coldplay's new world tour!"
+      }
+    ],
+    "othersEvent": [
+      {
+        "id": "1Ad0ZbKGkmXKPYj",
+        "date": "2024-07-01",
+        "name": "Stars of Comedy Ticket + Hotel Deals",
+        "images": [
+          "https://s1.ticketm.net/dam/c/50a/fa9caa1f-73a1-411e-b507-ec56fa59650a_106061_RETINA_LANDSCAPE_16_9.jpg"
+        ],
+        "venue": "Harrah's Showroom at Harrah's Las Vegas"
       }
     ]
   }
@@ -863,6 +876,197 @@ All wishlist operations require the user to be authenticated. The `userId` is au
 - All billing operations require the user to be authenticated.
 - The `userId` is automatically extracted from the JWT token.
 - Card numbers are stored securely and returned only in a masked format during read operations.
+
+---
+
+## 📌 1️⃣3️⃣ Purchase (Requires Authentication)
+
+---
+
+### 🔹 `POST /purchase`
+
+- **Description:**  
+  Adds a purchase record for the authenticated user.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Request Body (JSON)**
+
+  ```json
+  {
+    "eventId": "1A9ZkkeGkd1Zepn",
+    "eventName": "Eagles Live at the Sphere",
+    "eventDate": "2025-04-04",
+    "eventImage": "https://someimage.com/eagles.jpg",
+    "eventVenue": "Sphere",
+    "billingCardId": "65ffeae61ddc14edac3c2444",
+    "price": 130
+  }
+  ```
+
+- **Success Response**
+  ```json
+  {
+    "message": "Purchase completed",
+    "purchase": {
+      "_id": "660123456789abcdef123456",
+      "userId": "65f1d1d6a8a3f2b3c3f9e7b2",
+      "eventId": "1A9ZkkeGkd1Zepn",
+      "eventName": "Eagles Live at the Sphere",
+      "eventDate": "2025-04-04",
+      "eventImage": "https://someimage.com/eagles.jpg",
+      "eventVenue": "Sphere",
+      "billingCardId": "65ffeae61ddc14edac3c2444",
+      "purchaseDate": "2025-03-22T05:21:00.000Z",
+      "price": 130
+    }
+  }
+  ```
+
+---
+
+## 📌 1️⃣4️⃣ myTicket (Requires Authentication)
+
+---
+
+### 🔹 `GET /myTicket/upComming`
+
+- **Description:**  
+  return upComming tickets list.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Success Response**
+  ```json
+  {
+    "upcomingEvents": [
+      {
+        "eventName": "Coldplay Live",
+        "eventDate": "2025-09-01",
+        "eventVenue": "Rogers Centre",
+        "eventImage": "https://someimage.com/coldplay.jpg",
+        "price": 140
+      }
+    ]
+  }
+  ```
+
+---
+
+### 🔹 `GET /myTicket/past`
+
+- **Description:**  
+  return past tickets list.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Success Response**
+  ```json
+  {
+    "pastEvents": [
+      {
+        "eventName": "Eagles Live at the Sphere",
+        "eventDate": "2024-12-01",
+        "eventVenue": "Sphere",
+        "eventImage": "https://someimage.com/eagles.jpg",
+        "price": 130
+      }
+    ]
+  }
+  ```
+
+---
+
+### 🔹 `GET /myTicket/:purchaseId`
+
+- **Description:**  
+  Retrieves full detail of a specific purchase using its ID.
+
+- **Path Parameters**
+  | Parameter | Type | Description |
+  |--------------|--------|-------------------------|
+  | `purchaseId` | String | The ID of the purchase. |
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Request Example**
+
+  ```
+  GET /purchase/660123456789abcdef123456
+  ```
+
+- **Success Response**
+
+  ```json
+  {
+    "purchase": {
+      "_id": "660123456789abcdef123456",
+      "userId": "65f1d1d6a8a3f2b3c3f9e7b2",
+      "eventId": "1A9ZkkeGkd1Zepn",
+      "eventName": "Eagles Live at the Sphere",
+      "eventDate": "2025-04-04",
+      "eventImage": "https://someimage.com/eagles.jpg",
+      "eventVenue": "Sphere",
+      "billingCardId": "65ffeae61ddc14edac3c2444",
+      "purchaseDate": "2025-03-22T05:21:00.000Z",
+      "price": 130
+    }
+  }
+  ```
+
+- **Error Response**
+  ```json
+  {
+    "message": "Purchase not found"
+  }
+  ```
+
+---
+
+### 🔹 `DELETE /myTicket/:purchaseId`
+
+- **Description:**  
+  Deletes a purchase record by its ID (for authenticated user only).
+
+- **Path Parameters**
+  | Parameter | Type | Description |
+  |--------------|--------|-------------------------|
+  | `purchaseId` | String | The ID of the purchase. |
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Request Example**
+
+  ```
+  DELETE /purchase/660123456789abcdef123456
+  ```
+
+- **Success Response**
+
+  ```json
+  {
+    "message": "Purchase deleted successfully"
+  }
+  ```
+
+- **Error Response**
+  ```json
+  {
+    "message": "Purchase not found or not authorized"
+  }
+  ```
+
+---
 
 # 🚀 Additional Information
 
