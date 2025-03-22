@@ -14,7 +14,12 @@ const app = express();
 
 // Middlewares
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+// Allow frontend requests from localhost:5173
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true // Allow cookies if needed
+}));
 app.use(express.json());
 
 if (process.env.NODE_ENV === "test") {
