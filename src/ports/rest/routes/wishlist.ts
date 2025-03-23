@@ -10,7 +10,7 @@ ConnectToDb();
 
 router.use(authenticateToken); // Protect all wishlist routes
 
-// ➕ Add to Wishlist
+// Add to Wishlist
 router.post("/", async(req:Request, res: Response)=>{
     try{
         const { eventId, name, date, image, venue } = req.body;
@@ -26,7 +26,7 @@ router.post("/", async(req:Request, res: Response)=>{
     }
 });
 
-// 📄 Get Wishlist
+//Get Wishlist
 router.get("/", async (req: Request, res: Response) => {
     try {
         const userId = (req as any).user.id;
@@ -38,7 +38,7 @@ router.get("/", async (req: Request, res: Response) => {
     }
 });
 
-// ❌ Remove from Wishlist
+//Remove from Wishlist
 router.delete("/:eventId", async(req:Request, res:Response)=>{
         try {
             const { eventId } = req.params;

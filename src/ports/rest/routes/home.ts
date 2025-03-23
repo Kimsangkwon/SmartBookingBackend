@@ -3,7 +3,7 @@ import { getHomePageEvents } from "../../../controllers/homeController";
 
 const router = Router();
 
-
+//get evetns for homepage
 router.get("/", async (req: Request, res: Response) => {
     try {
         const data = await getHomePageEvents();

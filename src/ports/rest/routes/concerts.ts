@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import {getConcerts} from "../../../controllers/concertController";
 const router = Router();
 
-
+// get all concert
 router.get("/", async (req: Request, res: Response) => {
     try {
         const { city, startDate, endDate, genre, keyword } = req.query;

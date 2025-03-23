@@ -3,7 +3,6 @@ import dotenv from "dotenv-safe";
 import cors from "cors";
 import dependencies from "./infrastructure/dependencies";
 import userRoutes, { search } from "./ports/rest/routes/user";
-import eventRoutes from "./ports/rest/routes/events";
 import searchRoutes from "./ports/rest/routes/search";
 import homeRoutes from "./ports/rest/routes/home";
 import concertRoutes from "./ports/rest/routes/concerts";
@@ -41,7 +40,6 @@ if (process.env.NODE_ENV !== "test") {
 
 // Routes
 app.use("/user", userRoutes);
-app.use("/events", eventRoutes);
 app.use("/search", searchRoutes);
 app.use("/home", homeRoutes);
 app.use("/concerts", concertRoutes);

@@ -2,7 +2,7 @@ import { Router } from "express";
 import { getEventDetail } from "../../../infrastructure/ticketmasterApi";
 
 const router = Router();
-
+//get event detail
 router.get("/:eventId", async (req, res) => {
     const { eventId } = req.params;
     if (!eventId) {

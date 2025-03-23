@@ -2,7 +2,7 @@ import { Router } from "express";
 import { getOthers } from "../../../controllers/OtherController";
 
 const router = Router();
-
+//get other events
 router.get("/", async (req, res) => {
     try {
         const { city, startDate, endDate, classificationName, keyword } = req.query;
