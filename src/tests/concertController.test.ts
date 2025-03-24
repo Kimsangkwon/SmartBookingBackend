@@ -1,13 +1,13 @@
 import { getConcerts } from "../controllers/concertController";
 import { fetchConcerts } from "../infrastructure/ticketmasterApi";
-import { ConcertEvent } from "../infrastructure/mongodb/models/ConcertEvent";
+import { ConcertEvent } from "../domain/ConcertEvent";
 
 // ✅ Mock dependencies
 jest.mock("../infrastructure/ticketmasterApi", () => ({
   fetchConcerts: jest.fn(),
 }));
 
-jest.mock("../infrastructure/mongodb/models/ConcertEvent", () => ({
+jest.mock("../domain/ConcertEvent", () => ({
   ConcertEvent: {
     fromApiResponse: jest.fn((event) => ({
       mapped: true,

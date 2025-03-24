@@ -1,62 +1,41 @@
 import request from "supertest";
-import mongoose from "mongoose";
 import app from "../index";
-import { ConnectToDb } from "../infrastructure/mongodb/connection";
+import * as searchController from "../controllers/searchController";
 
-// ✅ Mock searchEvents from controller
-jest.mock("../controllers/searchService", () => ({
-  searchEvents: jest.fn(),
-}));
-
-import { searchEvents } from "../controllers/searchService";
-
-jest.setTimeout(20000);
+jest.mock("../controllers/searchController");
 
 describe("🔍 Search API Tests", () => {
-  beforeAll(async () => {
-    if (mongoose.connection.readyState === 0) {
-      await ConnectToDb();
-    }
-  });
+  const mockEvents = [
+    { id: "1", name: "Event A" },
+    { id: "2", name: "Event B" },
+  ];
 
-  afterAll(async () => {
-    if (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2) {
-      await mongoose.disconnect();
-      console.log("🔌 Disconnected from MongoDB");
-    }
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it("✅ Should return filtered events with valid query params", async () => {
-    const mockEvents = [
-      { name: "Filtered Event A", city: "Toronto" },
-      { name: "Filtered Event B", city: "Toronto" },
-    ];
-
-    (searchEvents as jest.Mock).mockResolvedValue(mockEvents);
+    (searchController.searchEvents as jest.Mock).mockResolvedValue(mockEvents);
 
     const res = await request(app)
       .get("/search")
-      .query({
-        cityOrPostalCode: "Toronto",
-        date: "2025-04-01",
-        keyword: "Music"
-      });
+      .query({ cityOrPostalCode: "Toronto", date: "2025-04-01", keyword: "concert" });
 
     expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
     expect(res.body).toEqual(mockEvents);
+    expect(searchController.searchEvents).toHaveBeenCalledWith({
+      cityOrPostalCode: "Toronto",
+      date: "2025-04-01",
+      keyword: "concert",
+    });
   });
 
   it("❌ Should return 500 if search controller throws error", async () => {
-    (searchEvents as jest.Mock).mockRejectedValue(new Error("Mocked error"));
+    (searchController.searchEvents as jest.Mock).mockRejectedValue(new Error("Mocked error"));
 
     const res = await request(app)
       .get("/search")
-      .query({
-        cityOrPostalCode: "Toronto",
-        date: "2025-04-01",
-        keyword: "Music"
-      });
+      .query({ cityOrPostalCode: "Toronto", date: "2025-04-01", keyword: "concert" });
 
     expect(res.status).toBe(500);
     expect(res.body).toHaveProperty("error", "Failed to fetch and filter events");

@@ -1,9 +1,9 @@
 import { getHomePageEvents } from "../controllers/homeController";
 import { fetchEventsByCategory, fetchMostViewedEvents } from "../infrastructure/ticketmasterApi";
-import { HomeEvent } from "../infrastructure/mongodb/models/HomeEvent";
+import { HomeEvent } from "../domain/HomeEvent";
 
 jest.mock("../infrastructure/ticketmasterApi");
-jest.mock("../infrastructure/mongodb/models/HomeEvent");
+jest.mock("../domain/HomeEvent");
 
 const mockEvent = { id: "1", name: "Event 1" };
 const mockMappedEvent = { mapped: true };

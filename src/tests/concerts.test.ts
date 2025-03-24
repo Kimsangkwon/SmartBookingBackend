@@ -9,7 +9,7 @@ jest.mock("../controllers/concertController", () => ({
 
 import { getConcerts } from "../controllers/concertController";
 
-describe("🎸 Concerts API Tests", () => {
+describe("🎶 Concerts API", () => {
   beforeAll(async () => {
     if (mongoose.connection.readyState === 0) {
       await ConnectToDb();
@@ -17,20 +17,17 @@ describe("🎸 Concerts API Tests", () => {
   });
 
   afterAll(async () => {
-    if (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2) {
-      await mongoose.disconnect();
-      console.log("🔌 Disconnected from MongoDB");
-    }
+    await mongoose.disconnect();
   });
 
   it("✅ Should return concert events with valid query params", async () => {
     const mockConcerts = [
-      { id: 1, name: "Concert A" },
-      { id: 2, name: "Concert B" },
+      { id: "1", name: "Concert A" },
+      { id: "2", name: "Concert B" },
     ];
-  
+
     (getConcerts as jest.Mock).mockResolvedValue(mockConcerts);
-  
+
     const res = await request(app)
       .get("/concerts")
       .query({
@@ -38,31 +35,27 @@ describe("🎸 Concerts API Tests", () => {
         startDate: "2025-04-01",
         endDate: "2025-04-30",
         genre: "rock",
-        keyword: "guitar"
+        keyword: "guitar",
       });
-  
+
     expect(res.status).toBe(200);
-  
-    // ✅ Fix these two lines:
-    expect(Array.isArray(res.body.concerts)).toBe(true);
-    expect(res.body.concerts).toEqual(mockConcerts);
+    expect(res.body).toEqual(mockConcerts);
+    expect(getConcerts).toHaveBeenCalledWith({
+      city: "Toronto",
+      startDate: "2025-04-01",
+      endDate: "2025-04-30",
+      genre: "rock",
+      keyword: "guitar",
+    });
   });
-  
 
-  it("❌ Should handle internal error and return 500", async () => {
-    (getConcerts as jest.Mock).mockRejectedValue(new Error("Mocked error"));
+  it("❌ Should return 500 if getConcerts throws error", async () => {
+    (getConcerts as jest.Mock).mockRejectedValue(new Error("Mocked failure"));
 
-    const res = await request(app)
-      .get("/concerts")
-      .query({
-        city: "Toronto",
-        startDate: "2025-04-01",
-        endDate: "2025-04-30",
-        genre: "pop",
-        keyword: "music"
-      });
+    const res = await request(app).get("/concerts");
 
     expect(res.status).toBe(500);
-    expect(res.body).toHaveProperty("error", "Failed to fetch concerts");
+    expect(res.body).toEqual({ error: "Failed to fetch concerts" });
+    expect(getConcerts).toHaveBeenCalled();
   });
 });
