@@ -1,8 +1,8 @@
 import { Request, Response, Router } from "express";
-import { searchEvents } from "../../../controllers/searchService";
+import { searchEvents } from "../../../controllers/searchController";
 
 const router = Router();
-
+//get event based on user input
 router.get("/", async (req: Request, res: Response) => {
     try {
         const { cityOrPostalCode, date, keyword } = req.query;

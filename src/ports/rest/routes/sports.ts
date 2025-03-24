@@ -3,7 +3,7 @@ import { getSports } from "../../../controllers/sportsController";
 
 const router = Router();
 
-
+//get sports event
 router.get("/", async (req, res) => {
     try {
         const { city, startDate, endDate, sportType, keyword } = req.query;

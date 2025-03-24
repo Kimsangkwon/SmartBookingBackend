@@ -3,17 +3,27 @@ import dotenv from "dotenv-safe";
 import cors from "cors";
 import dependencies from "./infrastructure/dependencies";
 import userRoutes, { search } from "./ports/rest/routes/user";
-import eventRoutes from "./ports/rest/routes/events";
 import searchRoutes from "./ports/rest/routes/search";
 import homeRoutes from "./ports/rest/routes/home";
 import concertRoutes from "./ports/rest/routes/concerts";
 import sportRoutes from "./ports/rest/routes/sports";
+import otherRoutes from "./ports/rest/routes/others";
+import eventDetailRoutes from "./ports/rest/routes/eventDetails";
+import wishlistRoutes from "./ports/rest/routes/wishlist";
+import billingRoutes from "./ports/rest/routes/billing";
+import purchaseRoutes from "./ports/rest/routes/purchase";
+import myTicketRoutes from "./ports/rest/routes/myTicket";
 
 const app = express();
 
 // Middlewares
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+// Allow frontend requests from localhost:5173
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true // Allow cookies if needed
+}));
 app.use(express.json());
 
 if (process.env.NODE_ENV === "test") {
@@ -30,11 +40,16 @@ if (process.env.NODE_ENV !== "test") {
 
 // Routes
 app.use("/user", userRoutes);
-app.use("/events", eventRoutes);
 app.use("/search", searchRoutes);
 app.use("/home", homeRoutes);
 app.use("/concerts", concertRoutes);
 app.use("/sports",sportRoutes);
+app.use("/others", otherRoutes);
+app.use("/eventDetail", eventDetailRoutes);
+app.use("/wishlist", wishlistRoutes);
+app.use("/billing", billingRoutes);
+app.use("/purchase", purchaseRoutes);
+app.use("/myTicket", myTicketRoutes);
 
 // Start server only if not in test mode
 if (process.env.NODE_ENV !== "test") {

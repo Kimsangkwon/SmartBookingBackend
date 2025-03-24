@@ -1,12 +1,16 @@
-import { fetchSports } from "../infrastructure/ticketmasterApi";
+import { fetchMostViewedEvents, fetchSports } from "../infrastructure/ticketmasterApi";
 import { SportsEvent } from "../domain/sportsEvent";
 
-export const getSports = async (filters: any): Promise<SportsEvent[]> => {
+export const getSports = async (filters: any) => {
     try {
-        const events = await fetchSports(filters);
-        return events.map((event: any) => SportsEvent.fromApiResponse(event));
+        const sportsData = await fetchSports(filters);
+        const sportsEvents = sportsData.map((event: any) => SportsEvent.fromApiResponse(event));
+        const mostViewedSportsData = await fetchMostViewedEvents("sport");
+        const mostViewedSportEvent = mostViewedSportsData.map((event:any)=>SportsEvent.fromApiResponse(event));
+        return {sportsEvents, mostViewedSportEvent}
+
     } catch (error) {
         console.error("❌ Error fetching sports in sportsController:", error);
-        throw new Error("Failed to fetch sports events");
+        return{sportsEvents:[], mostViewedSportEvent:[]};
     }
 };
