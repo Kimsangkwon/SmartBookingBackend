@@ -16,7 +16,14 @@ import myTicketRoutes from "./ports/rest/routes/myTicket";
 
 const app = express();
 
-app.use(cors());
+// Middlewares
+app.use(express.urlencoded({ extended: false }));
+// Allow frontend requests from localhost:5173
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true // Allow cookies if needed
+}));
 app.use(express.json());
 
 dotenv.config();

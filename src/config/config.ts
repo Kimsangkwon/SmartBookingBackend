@@ -9,6 +9,7 @@ const MONGO_PORT = process.env.MONGO_PASSWORD ?? "";
 const MONGO_URL = `mongodb://${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}`;
 const SECRET_KEY = process.env.SECRET_KEY??"";
 const EVENT_API_KEY = process.env.EVENT_API_KEY??"";
+
 export const config = {
   environment: ENVIRONMENT,
   mongo: {
