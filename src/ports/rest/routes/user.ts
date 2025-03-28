@@ -1,11 +1,12 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { authenticateToken } from "../middleware/authentication";
 import { validateProfileData } from "../../../controllers/validateProfileData";
 import {registerUser, loginUser, getUserProfile, saveUserProfile} from "../../../infrastructure/mongodb/queries/user";
 
 const router = express.Router();
+
 //Create user account
-router.post("/create", async (req: Request, res: Response) => {
+router.post("/create", async (req: Request, res: Response, next:NextFunction) => {
     try {
         const { email, userPassword } = req.body;
         await registerUser(email, userPassword);

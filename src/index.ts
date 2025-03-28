@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv-safe";
 import cors from "cors";
 import dependencies from "./infrastructure/dependencies";
-import userRoutes, { search } from "./ports/rest/routes/user";
+import userRoutes from "./ports/rest/routes/user";
 import searchRoutes from "./ports/rest/routes/search";
 import homeRoutes from "./ports/rest/routes/home";
 import concertRoutes from "./ports/rest/routes/concerts";
@@ -16,27 +16,13 @@ import myTicketRoutes from "./ports/rest/routes/myTicket";
 
 const app = express();
 
-// Middlewares
-app.use(express.urlencoded({ extended: false }));
-// Allow frontend requests from localhost:5173
-app.use(cors({
-  origin: "http://localhost:5173",
-  methods: "GET,POST,PUT,DELETE",
-  credentials: true // Allow cookies if needed
-}));
+app.use(cors());
 app.use(express.json());
 
-if (process.env.NODE_ENV === "test") {
-  dotenv.config({ path: ".env.test" });
-} else {
-  dotenv.config();
-}
+dotenv.config();
 
-// Database Connection
-const { mongoDbClient } = dependencies;
-if (process.env.NODE_ENV !== "test") {
-  mongoDbClient.ConnectToDb();
-}
+const {mongoDbClient} = dependencies;
+mongoDbClient.ConnectToDb();
 
 // Routes
 app.use("/user", userRoutes);
@@ -51,13 +37,10 @@ app.use("/billing", billingRoutes);
 app.use("/purchase", purchaseRoutes);
 app.use("/myTicket", myTicketRoutes);
 
-// Start server only if not in test mode
-if (process.env.NODE_ENV !== "test") {
-  const port = 4000;
-  app.listen(port, () => {
-    console.log(`Now listening on port ${port}`);
-  });
-}
+const port = 4000;
 
-// Export `app` for testing
+app.listen(port, () => {
+  console.log(`Now listening on port ${port}`);
+});
+
 export default app;
