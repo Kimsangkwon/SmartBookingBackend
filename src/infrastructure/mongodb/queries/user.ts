@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
 import dependencies from "../../../infrastructure/dependencies";
-import { findUserProfile, updateUserProfile } from "../../../infrastructure/userProfileRepository";
+import UserProfile from "../models/userProfile";
 
 const { config } = dependencies;
 const { secret } = config;
@@ -13,7 +13,7 @@ export const registerUser = async (email: string, password: string) => {
         throw new Error("User already exists");
     }
 
-    const salt = await bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
     const newUser = new User({ email, userPassword: hashedPassword });
     await newUser.save();
@@ -31,9 +31,19 @@ export const loginUser = async (email: string, password: string) => {
 };
 
 export const getUserProfile = async (userId: string) => {
-    return await findUserProfile(userId);
+    return await UserProfile.findOne({ userId });
 };
 
 export const saveUserProfile = async (userId: string, profileData: any) => {
-    return await updateUserProfile(userId, profileData);
+    let profile = await UserProfile.findOne({ userId });
+
+    if (profile) {
+        Object.assign(profile, profileData);
+        await profile.save();
+        return { message: "Profile updated successfully", profile };
+    } else {
+        profile = new UserProfile({ userId, ...profileData });
+        await profile.save();
+        return { message: "Profile created successfully", profile };
+    }
 };
