@@ -17,7 +17,7 @@ router.post("/", authenticateToken, async (req: Request, res: Response) => {
   
       res.status(201).json({ message: "Purchase successful", purchase: newPurchase });
     } catch (error) {
-      console.error("❌ Error creating purchase:", error);
+      console.error("Error creating purchase:", error);
       res.status(500).json({ error: "Failed to process purchase" });
     }
   });

@@ -17,7 +17,7 @@ export const getOthers = async (filters: any) => {
 
         return {otherEvents, mostViewedOtherEvent}
     } catch (error) {
-        console.error("❌ Error fetching other events in othersController:", error);
-        throw new Error("Failed to fetch other events");
+        console.error("Error fetching other events in othersController:", error);
+        return{otherEvent:[], mostViewedOtherEvent:[]};
     }
 };

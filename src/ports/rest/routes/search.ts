@@ -11,7 +11,7 @@ router.get("/", async (req: Request, res: Response) => {
         const events = await searchEvents(filters);
         res.status(200).json(events);
     } catch (error) {
-        console.error("❌ Error in search controller:", error);
+        console.error("Error in search controller:", error);
         res.status(500).json({ error: "Failed to fetch and filter events" });
     }
 });

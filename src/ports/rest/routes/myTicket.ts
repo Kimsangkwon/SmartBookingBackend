@@ -16,7 +16,7 @@ router.get("/upComming", authenticateToken, async (req: Request, res: Response) 
         upcomingTickets: upcoming,
       });
     } catch (error) {
-      console.error("❌ Error fetching categorized purchases:", error);
+      console.error("Error fetching categorized purchases:", error);
       res.status(500).json({ error: "Failed to fetch purchase history" });
     }
   });
@@ -32,7 +32,7 @@ router.get("/upComming", authenticateToken, async (req: Request, res: Response) 
         pastTickets: past,
       });
     } catch (error) {
-      console.error("❌ Error fetching categorized purchases:", error);
+      console.error("Error fetching categorized purchases:", error);
       res.status(500).json({ error: "Failed to fetch purchase history" });
     }
   });
@@ -45,7 +45,7 @@ router.get("/:id", authenticateToken, async (req: Request, res: Response) => {
   
       res.status(200).json({ purchase });
     } catch (error) {
-      console.error("❌ Error fetching purchase:", error);
+      console.error("Error fetching purchase:", error);
       res.status(500).json({ error: "Failed to fetch purchase" });
     }
   });
@@ -60,7 +60,7 @@ router.delete("/:id", authenticateToken, async (req: Request, res: Response) => 
   
       res.status(200).json({ message: "Purchase cancelled" });
     } catch (error) {
-      console.error("❌ Error deleting purchase:", error);
+      console.error("Error deleting purchase:", error);
       res.status(500).json({ error: "Failed to delete purchase" });
     }
   });

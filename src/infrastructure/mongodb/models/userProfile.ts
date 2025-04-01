@@ -10,7 +10,7 @@ const UserProfileSchema = new mongoose.Schema({
     province: { type: String, required: true, minlength: 2 },
     city: { type: String, required: true, minlength: 2 },
     address1: { type: String, required: true, minlength: 2 },
-    address2: { type: String, minlength: 2 }, // Optional
+    address2: { type: String, required:false}, // Optional
     birthdate: { type: Date, required: true },
     createdAt: { type: Date, default: Date.now }
 });

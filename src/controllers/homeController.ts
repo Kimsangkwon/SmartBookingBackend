@@ -27,7 +27,7 @@ export const getHomePageEvents = async () => {
 
         return { mostViewed, sportsEvents, concertEvents, othersEvent };
     } catch (error) {
-        console.error("❌ Error fetching home page events:", error);
+        console.error("Error fetching home page events:", error);
         return { mostViewed: [], sportsEvents: [], concertEvents: [] , othersEvent:[]};
     }
 };

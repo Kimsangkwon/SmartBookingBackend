@@ -20,6 +20,6 @@ export const authenticateToken = (req: any, res: any, next: any) => {
     }
     req.user = { id: decoded.userId, email: decoded.email };
     next();
-    console.log("✅ Authenticated User:", decoded);
+    console.log("Authenticated User:", decoded);
 });
 }
