@@ -18,7 +18,7 @@ router.post("/", authenticateToken, async(req:Request, res: Response)=>{
         res.status(201).json({message:"Event added to wishlist", wishlist});
     }
     catch(error){
-        console.error("❌ Error adding to wishlist:", error);
+        console.error("Error adding to wishlist:", error);
         res.status(500).json({ error: "Failed to add to wishlist" });
     }
 });
@@ -30,7 +30,7 @@ router.get("/", authenticateToken, async (req: Request, res: Response) => {
         const wishlist = await getWishlistByUserId(userId);
         res.status(200).json({ wishlist });
     } catch (error) {
-        console.error("❌ Error fetching wishlist:", error);
+        console.error("Error fetching wishlist:", error);
         res.status(500).json({ error: "Failed to fetch wishlist" });
     }
 });
@@ -49,7 +49,7 @@ router.delete("/:eventId", authenticateToken, async(req:Request, res:Response)=>
     
             res.status(200).json({ message: "Event removed from wishlist" });
         } catch (error) {
-            console.error("❌ Error removing from wishlist:", error);
+            console.error("Error removing from wishlist:", error);
             res.status(500).json({ error: "Failed to remove from wishlist" });
         }
 });

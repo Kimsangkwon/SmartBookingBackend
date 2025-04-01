@@ -56,7 +56,8 @@ router.post("/profile", authenticateToken, async (req: any, res: Response) => {
     try {
         const result = await saveUserProfile(req.user.id, req.body);
         res.status(200).json(result);
-    } catch {
+    } catch(error) {
+        console.error("Error saving user profile", error)
         res.status(500).json({ error: "Internal Server Error" });
     }
 });

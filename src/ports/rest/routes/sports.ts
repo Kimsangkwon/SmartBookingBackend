@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
 
         res.status(200).json({ sports });
     } catch (error) {
-        console.error("❌ Error in sports route:", error);
+        console.error("Error in sports route:", error);
         res.status(500).json({ error: "Failed to fetch sports events" });
     }
 });

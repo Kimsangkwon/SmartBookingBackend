@@ -12,7 +12,7 @@ router.post("/", authenticateToken, async (req: Request, res: Response) => {
       const billing = await createBillingInfo(userId, req.body);
       res.status(201).json({ message: "Billing info added", billing });
     } catch (error) {
-      console.error("❌ Error adding billing info:", error);
+      console.error("Error adding billing info:", error);
       res.status(500).json({ error: "Failed to add billing info" });
     }
   });
@@ -23,7 +23,7 @@ router.get("/", authenticateToken, async (req: Request, res: Response) => {
       const cards = await getBillingInfosByUserId(userId);
       res.status(200).json({ cards });
     } catch (error) {
-      console.error("❌ Error fetching billing info list:", error);
+      console.error("Error fetching billing info list:", error);
       res.status(500).json({ error: "Failed to fetch billing info list" });
     }
   });
@@ -36,7 +36,7 @@ router.get("/:id", authenticateToken, async (req: Request, res: Response) => {
       if (!billing) return res.status(404).json({ message: "Billing info not found" });
       res.status(200).json({ billing });
     } catch (error) {
-      console.error("❌ Error fetching billing detail:", error);
+      console.error("Error fetching billing detail:", error);
       res.status(500).json({ error: "Failed to fetch billing detail" });
     }
   });
@@ -49,7 +49,7 @@ router.put("/:id", authenticateToken, async (req: Request, res: Response) => {
       if (!updated) return res.status(404).json({ message: "Billing info not found" });
       res.status(200).json({ message: "Billing info updated", updated });
     } catch (error) {
-      console.error("❌ Error updating billing info:", error);
+      console.error("Error updating billing info:", error);
       res.status(500).json({ error: "Failed to update billing info" });
     }
   });
@@ -62,7 +62,7 @@ router.delete("/:id", authenticateToken, async (req: Request, res: Response) => 
       if (!result) return res.status(404).json({ message: "Billing info not found" });
       res.status(200).json({ message: "Billing info deleted" });
     } catch (error) {
-      console.error("❌ Error deleting billing info:", error);
+      console.error("Error deleting billing info:", error);
       res.status(500).json({ error: "Failed to delete billing info" });
     }
   });

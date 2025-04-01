@@ -17,7 +17,7 @@ router.get("/:eventId", async (req, res) => {
 
         res.status(200).json({ eventData });
     } catch (error) {
-        console.error("❌ Error in detail route:", error);
+        console.error("Error in detail route:", error);
         res.status(500).json({ error: "Failed to fetch event details" });
     }
 });
