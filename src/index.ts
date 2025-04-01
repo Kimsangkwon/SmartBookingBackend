@@ -13,6 +13,7 @@ import wishlistRoutes from "./ports/rest/routes/wishlist";
 import billingRoutes from "./ports/rest/routes/billing";
 import purchaseRoutes from "./ports/rest/routes/purchase";
 import myTicketRoutes from "./ports/rest/routes/myTicket";
+import cartRoutes from "./ports/rest/routes/cart";
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use("/wishlist", wishlistRoutes);
 app.use("/billing", billingRoutes);
 app.use("/purchase", purchaseRoutes);
 app.use("/myTicket", myTicketRoutes);
+app.use("/cart", cartRoutes);
 
 const port = 4000;
 
