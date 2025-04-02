@@ -162,21 +162,14 @@ export const fetchOthers = async ( city?: string, startDate?: string, endDate?: 
 };
 
 
-export const getEventDetail = async(eventId : any)=> {
+export const fetchEventDetail = async(eventId : any)=> {
     try {
         const response = await axios.get(`${BASE_URL}/${eventId}`, {
             params: { apikey: config.event_api },
         });
-
-        const event = response.data;
-
-        if (!event) {
-            return null;
-        }
-
-        return event;
+        return response.data;
     } catch (error) {
-        console.error("Error fetching event from TicketmasterAPI:", error);
+        console.error("Error fetching eventDetail from TicketmasterAPI:", error);
         return null;
     }
 };

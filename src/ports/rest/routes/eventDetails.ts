@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { getEventDetail } from "../../../infrastructure/ticketmasterApi";
+import { Request, Response, Router } from "express";
+import { getEventDetail } from "../../../controllers/eventDetailController";
 
 const router = Router();
 //get event detail
-router.get("/:eventId", async (req, res) => {
+router.get("/:eventId", async (req:Request, res:Response) => {
     const { eventId } = req.params;
     if (!eventId) {
         return res.status(400).json({ error: "Event ID is required" });

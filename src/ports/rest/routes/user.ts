@@ -43,7 +43,8 @@ router.get("/profile", authenticateToken, async (req: any, res: Response) => {
     try {
         const profile = await getUserProfile(req.user.id);
         res.status(200).json(profile ? profile : { profile: null });
-    } catch {
+    } catch(error) {
+        console.error("Error get user profile", error)
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
