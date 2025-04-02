@@ -10,11 +10,14 @@ ConnectToDb();
 // Add to Cart
 router.post("/", authenticateToken, async(req:Request, res: Response)=>{
     try{
-        const { eventId, name, date, image, venue } = req.body;
+        const { eventId, name, date, image, venue, price, quantity } = req.body;
         const userId = (req as any).user.id;
-        const cart = await createCartItem(userId, {
-            eventId, name, date, image, venue
+        const  { alreadyExists, cart } = await createCartItem(userId, {
+            eventId, name, date, image, venue, price, quantity
         });
+        if (alreadyExists) {
+            return res.status(409).json({message: "This event is already in your cart.",cart});
+        }
         res.status(201).json({message:"Event added to cart", cart});
     }
     catch(error){

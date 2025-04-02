@@ -546,6 +546,7 @@
   ```json
   {
     "eventData": {
+        "price": 50,
         "name": "The Musical Box - 50th Anniversary Of Selling England By The Pound",
         "type": "event",
         "id": "1A8ZkFJGkdjgopg",
@@ -896,34 +897,63 @@ All wishlist operations require the user to be authenticated. The `userId` is au
 
   ```json
   {
-    "eventId": "1A9ZkkeGkd1Zepn",
-    "eventName": "Eagles Live at the Sphere",
-    "eventDate": "2025-04-04",
-    "eventImage": "https://someimage.com/eagles.jpg",
-    "eventVenue": "Sphere",
     "billingCardId": "65ffeae61ddc14edac3c2444",
-    "price": 130
+    "items": [
+      {
+        "eventId": "1A9ZkkeGkd1Zepn",
+        "eventName": "Eagles Live at the Sphere",
+        "eventDate": "2025-04-04",
+        "eventImage": "https://someimage.com/eagles.jpg",
+        "eventVenue": "Sphere",
+        "quantity": 2,
+        "price": 130
+      },
+      {
+        "eventId": "2B9ZkkeXsd8Zepn",
+        "eventName": "Coldplay World Tour",
+        "eventDate": "2025-05-12",
+        "eventImage": "https://someimage.com/coldplay.jpg",
+        "eventVenue": "Wembley Stadium",
+        "quantity": 1,
+        "price": 180
+      }
+    ]
   }
   ```
 
-- **Success Response**
-  ```json
-  {
-    "message": "Purchase completed",
-    "purchase": {
-      "_id": "660123456789abcdef123456",
-      "userId": "65f1d1d6a8a3f2b3c3f9e7b2",
-      "eventId": "1A9ZkkeGkd1Zepn",
-      "eventName": "Eagles Live at the Sphere",
-      "eventDate": "2025-04-04",
-      "eventImage": "https://someimage.com/eagles.jpg",
-      "eventVenue": "Sphere",
-      "billingCardId": "65ffeae61ddc14edac3c2444",
-      "purchaseDate": "2025-03-22T05:21:00.000Z",
-      "price": 130
+  - **Success Response**
+    ```json
+    {
+      "message": "Purchase successful",
+      "purchase": {
+        "_id": "660123456789abcdef123456",
+        "userId": "65f1d1d6a8a3f2b3c3f9e7b2",
+        "billingCardId": "65ffeae61ddc14edac3c2444",
+        "items": [
+          {
+            "eventId": "1A9ZkkeGkd1Zepn",
+            "eventName": "Eagles Live at the Sphere",
+            "eventDate": "2025-04-04",
+            "eventImage": "https://someimage.com/eagles.jpg",
+            "eventVenue": "Sphere",
+            "quantity": 2,
+            "price": 130
+          },
+          {
+            "eventId": "2B9ZkkeXsd8Zepn",
+            "eventName": "Coldplay World Tour",
+            "eventDate": "2025-05-12",
+            "eventImage": "https://someimage.com/coldplay.jpg",
+            "eventVenue": "Wembley Stadium",
+            "quantity": 1,
+            "price": 180
+          }
+        ],
+        "totalAmount": 440,
+        "purchaseDate": "2025-04-02T08:45:00.000Z"
+      }
     }
-  }
-  ```
+    ```
 
 ---
 
@@ -1065,6 +1095,144 @@ All wishlist operations require the user to be authenticated. The `userId` is au
     "message": "Purchase not found or not authorized"
   }
   ```
+
+---
+
+## 📌 1️⃣5️⃣ Cart (Requires Authentication)
+
+### 🔹 `POST /cart`
+
+- **Description:**  
+  Adds an event to the logged-in user's cart.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Request Body (JSON)**
+
+  ```json
+  {
+    "eventId": "1A9ZkkeGkd1Zepn",
+    "name": "Eagles Live at the Sphere",
+    "date": "2025-04-04",
+    "image": "https://someimage.com/eagles.jpg",
+    "venue": "Sphere",
+    "price": 56,
+    "quantity": 1
+  }
+  ```
+
+- **Success Response**
+
+  ```json
+  {
+    "message": "Event added to wishlist",
+    "wishlist": {
+      "_id": "65ff2e9307ddc42bfa877534",
+      "userId": "65f1d1d6a8a3f2b3c3f9e7b2",
+      "eventId": "1A9ZkkeGkd1Zepn",
+      "name": "Eagles Live at the Sphere",
+      "date": "2025-04-04",
+      "image": "https://someimage.com/eagles.jpg",
+      "venue": "Sphere",
+      "price": 55,
+      "quantity": 1,
+      "addAt": "2025-03-20T18:01:55.711Z",
+      "__v": 0
+    }
+  }
+  ```
+
+- **Error Response (Unauthorized)**
+  ```json
+  {
+    "message": "No token provided"
+  }
+  ```
+  - **When user add same event**
+  ```json
+  {
+    "message": "This event is already in your cart."
+  }
+  ```
+
+---
+
+### 🔹 `GET /cart`
+
+- **Description:**  
+  Retrieves all cart items for the authenticated user.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Success Response**
+
+  ```json
+  {
+    "cart": [
+      {
+        "_id": "65ff2e9307ddc42bfa877534",
+        "userId": "65f1d1d6a8a3f2b3c3f9e7b2",
+        "eventId": "1A9ZkkeGkd1Zepn",
+        "name": "Eagles Live at the Sphere",
+        "date": "2025-04-04",
+        "image": "https://someimage.com/eagles.jpg",
+        "venue": "Sphere",
+        "addAt": "2025-03-20T18:01:55.711Z",
+        "price": 55,
+        "quantity": 1,
+        "__v": 0
+      }
+    ]
+  }
+  ```
+
+- **Error Response (Unauthorized)**
+  ```json
+  {
+    "message": "No token provided"
+  }
+  ```
+
+---
+
+### 🔹 `DELETE /cart/:eventId`
+
+- **Description:**  
+  Removes an event from the user's cart using the eventId.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Request Example**
+
+  ```http
+  DELETE /cart/1A9ZkkeGkd1Zepn
+  ```
+
+- **Success Response**
+
+  ```json
+  {
+    "message": "Event removed from cart"
+  }
+  ```
+
+- **Error Response (Not Found)**
+  ```json
+  {
+    "message": "Event not found in cart"
+  }
+  ```
+
+---
+
+📌 **Note:**  
+All cart operations require the user to be authenticated. The `userId` is automatically extracted from the JWT token and does not need to be provided manually in the request body.
 
 ---
 

@@ -10,7 +10,9 @@ const CartModelSchema = new Schema({
     name:{type: String, required:true}, 
     date:{type:String, required:true},
     image:{type:String},
-    venue:{type:String}
+    venue:{type:String},
+    price:{type:Number, required:true}, 
+    quantity:{type:Number, default:1}     
             
 });
 // Prevent duplicates for the same user and event

@@ -9,10 +9,20 @@ const router = Router();
 router.post("/", authenticateToken, async (req: Request, res: Response) => {
     try {
       const userId = (req as any).user.id;
-      const { eventId, eventName, eventDate, eventImage, eventVenue, billingCardId, price } = req.body;
+      const { billingCardId, items } = req.body;
   
+      // items: [{ eventId, eventName, eventDate, eventImage, eventVenue, quantity, price }]
+      if (!Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({ error: "No items to purchase." });
+      }
+
+      //calculate total amount
+      const totalAmount = items.reduce((sum, item) => sum + item.quantity * item.price, 0);
       const newPurchase = await createPurchase({
-        userId, eventId, eventName, eventDate, eventImage, eventVenue, billingCardId, price
+        userId,
+        billingCardId,
+        items,
+        totalAmount
       });
   
       res.status(201).json({ message: "Purchase successful", purchase: newPurchase });
