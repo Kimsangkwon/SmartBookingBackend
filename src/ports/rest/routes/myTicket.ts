@@ -37,10 +37,10 @@ router.get("/upComming", authenticateToken, async (req: Request, res: Response) 
     }
   });
   //Get selected ticket information
-  router.get("/:purchaseId/:eventId", authenticateToken, async (req: Request, res: Response) => {
+  router.get("/:purchaseId", authenticateToken, async (req: Request, res: Response) => {
     try {
-      const { purchaseId, eventId } = req.params;
-      const ticket = await getTicketById(purchaseId, eventId);
+      const { purchaseId } = req.params;
+      const ticket = await getTicketById(purchaseId);
       if (!ticket) return res.status(404).json({ message: "Ticket not found" });
   
       res.status(200).json({ ticket });
@@ -50,24 +50,13 @@ router.get("/upComming", authenticateToken, async (req: Request, res: Response) 
     }
   });
 //Remove selected ticket
-router.delete("/:purchaseId/:eventId", authenticateToken, async (req: Request, res: Response) => {
+router.delete("/:purchaseId", authenticateToken, async (req: Request, res: Response) => {
   try {
-    const { purchaseId, eventId } = req.params;
-    const { confirmDeleteAll } = req.body;
+    const { purchaseId } = req.params;
     const userId = (req as any).user.id;
-
-    const result = await deleteTicket(purchaseId, eventId, userId, confirmDeleteAll === true);
-
-    if (!result) {
-      return res.status(404).json({ message: "Ticket not found or unauthorized" });
-    }
-
-    // confirmation required
-    if (result.confirmRequired) {
-      return res.status(409).json({ message: result.message });
-    }
-
-    return res.status(200).json({ message: result.message || "Ticket deleted successfully" });
+    const result = await deleteTicket(purchaseId, userId);
+    if (!result) return res.status(404).json({ message: "Ticket not found or unauthorized" });
+    res.status(200).json({ message: "Ticket deleted successfully" });
   } catch (error) {
     console.error("Error deleting ticket:", error);
     res.status(500).json({ error: "Failed to delete ticket" });
