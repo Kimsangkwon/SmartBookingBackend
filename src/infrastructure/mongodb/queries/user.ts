@@ -5,7 +5,7 @@ import dependencies from "../../../infrastructure/dependencies";
 import UserProfile from "../models/userProfile";
 
 const { config } = dependencies;
-const { secret } = config;
+const { secret, admin_email, admin_password } = config;
 
 export const registerUser = async (email: string, password: string) => {
     const existingUser = await User.findOne({ email });
@@ -29,6 +29,18 @@ export const loginUser = async (email: string, password: string) => {
     const token = jwt.sign({ userId: user._id, email: user.email }, secret, { expiresIn: "1h" });
     return token;
 };
+
+export const loginAsAdmin = async (email: string, password: string) => {
+    console.log("Trying admin login with:", email, password);
+
+    if (email === admin_email && password === admin_password) {
+      const token = jwt.sign(
+        { userId: "admin-id", email, role: "admin" },secret,{ expiresIn: "1h" }
+      );
+      return token;
+    }
+    return null;
+  };
 
 export const getUserProfile = async (userId: string) => {
     return await UserProfile.findOne({ userId });

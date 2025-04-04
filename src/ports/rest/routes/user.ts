@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { authenticateToken } from "../middleware/authentication";
 import { validateProfileData } from "../../../controllers/validateProfileData";
-import {registerUser, loginUser, getUserProfile, saveUserProfile} from "../../../infrastructure/mongodb/queries/user";
+import {registerUser, loginUser, getUserProfile, saveUserProfile, loginAsAdmin} from "../../../infrastructure/mongodb/queries/user";
 
 const router = express.Router();
 
@@ -20,6 +20,10 @@ router.post("/create", async (req: Request, res: Response, next:NextFunction) =>
 router.post("/login", async (req: Request, res: Response) => {
     try {
         const { email, userPassword } = req.body;
+        const adminToken = await loginAsAdmin(email, userPassword);
+        if (adminToken) {
+          return res.status(200).json({ accessToken: adminToken });
+        }
         const token = await loginUser(email, userPassword);
         res.status(200).json({ accessToken: token });
     } catch (error: any) {
