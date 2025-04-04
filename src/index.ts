@@ -14,6 +14,8 @@ import billingRoutes from "./ports/rest/routes/billing";
 import purchaseRoutes from "./ports/rest/routes/purchase";
 import myTicketRoutes from "./ports/rest/routes/myTicket";
 import cartRoutes from "./ports/rest/routes/cart";
+import reviewRoutes from "./ports/rest/routes/review";
+import adminReviewRoutes from "./ports/rest/routes/admin/reviewManagement";
 
 const app = express();
 
@@ -45,6 +47,8 @@ app.use("/billing", billingRoutes);
 app.use("/purchase", purchaseRoutes);
 app.use("/myTicket", myTicketRoutes);
 app.use("/cart", cartRoutes);
+app.use("/review", reviewRoutes);
+app.use("/admin/reviews",adminReviewRoutes)
 
 const port = 4000;
 
