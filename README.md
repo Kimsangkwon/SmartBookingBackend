@@ -887,7 +887,7 @@ All wishlist operations require the user to be authenticated. The `userId` is au
 ### 🔹 `POST /purchase`
 
 - **Description:**  
-  Adds a purchase record for the authenticated user.
+  Creates a new purchase for a single event with specified quantity and billing card.
 
 - **Headers**
 
@@ -898,26 +898,13 @@ All wishlist operations require the user to be authenticated. The `userId` is au
   ```json
   {
     "billingCardId": "65ffeae61ddc14edac3c2444",
-    "items": [
-      {
-        "eventId": "1A9ZkkeGkd1Zepn",
-        "eventName": "Eagles Live at the Sphere",
-        "eventDate": "2025-04-04",
-        "eventImage": "https://someimage.com/eagles.jpg",
-        "eventVenue": "Sphere",
-        "quantity": 2,
-        "price": 130
-      },
-      {
-        "eventId": "2B9ZkkeXsd8Zepn",
-        "eventName": "Coldplay World Tour",
-        "eventDate": "2025-05-12",
-        "eventImage": "https://someimage.com/coldplay.jpg",
-        "eventVenue": "Wembley Stadium",
-        "quantity": 1,
-        "price": 180
-      }
-    ]
+    "eventId": "1A9ZkkeGkd1Zepn",
+    "eventName": "Eagles Live at the Sphere",
+    "eventDate": "2025-04-04",
+    "eventImage": "https://someimage.com/eagles.jpg",
+    "eventVenue": "Sphere",
+    "quantity": 2,
+    "price": 130
   }
   ```
 
@@ -929,27 +916,14 @@ All wishlist operations require the user to be authenticated. The `userId` is au
         "_id": "660123456789abcdef123456",
         "userId": "65f1d1d6a8a3f2b3c3f9e7b2",
         "billingCardId": "65ffeae61ddc14edac3c2444",
-        "items": [
-          {
-            "eventId": "1A9ZkkeGkd1Zepn",
-            "eventName": "Eagles Live at the Sphere",
-            "eventDate": "2025-04-04",
-            "eventImage": "https://someimage.com/eagles.jpg",
-            "eventVenue": "Sphere",
-            "quantity": 2,
-            "price": 130
-          },
-          {
-            "eventId": "2B9ZkkeXsd8Zepn",
-            "eventName": "Coldplay World Tour",
-            "eventDate": "2025-05-12",
-            "eventImage": "https://someimage.com/coldplay.jpg",
-            "eventVenue": "Wembley Stadium",
-            "quantity": 1,
-            "price": 180
-          }
-        ],
-        "totalAmount": 440,
+        "eventId": "1A9ZkkeGkd1Zepn",
+        "eventName": "Eagles Live at the Sphere",
+        "eventDate": "2025-04-04",
+        "eventImage": "https://someimage.com/eagles.jpg",
+        "eventVenue": "Sphere",
+        "quantity": 2,
+        "price": 130,
+        "totalAmount": 260,
         "purchaseDate": "2025-04-02T08:45:00.000Z"
       }
     }
@@ -971,15 +945,23 @@ All wishlist operations require the user to be authenticated. The `userId` is au
   - `Authorization: Bearer YOUR_JWT_TOKEN`
 
 - **Success Response**
+
   ```json
   {
-    "upcomingEvents": [
+    "upcomingTickets": [
       {
-        "eventName": "Coldplay Live",
-        "eventDate": "2025-09-01",
-        "eventVenue": "Rogers Centre",
+        "eventId": "1A9ZkkeGkd1Zepn",
+        "eventName": "Coldplay World Tour",
+        "eventDate": "2025-06-01",
         "eventImage": "https://someimage.com/coldplay.jpg",
-        "price": 140
+        "eventVenue": "Wembley Stadium",
+        "quantity": 2,
+        "price": 180,
+        "purchaseId": "660123456789abcdef123456",
+        "billingCardId": "65ffeae61ddc14edac3c2444",
+        "totalAmount": 360,
+        "purchaseDate": "2025-04-02T10:20:00.000Z",
+        "userId": "65f1d1d6a8a3f2b3c3f9e7b2"
       }
     ]
   }
@@ -999,13 +981,20 @@ All wishlist operations require the user to be authenticated. The `userId` is au
 - **Success Response**
   ```json
   {
-    "pastEvents": [
+    "pastTickets": [
       {
+        "eventId": "1A9ZkkeGkd1Zepn",
         "eventName": "Eagles Live at the Sphere",
         "eventDate": "2024-12-01",
-        "eventVenue": "Sphere",
         "eventImage": "https://someimage.com/eagles.jpg",
-        "price": 130
+        "eventVenue": "Sphere",
+        "quantity": 1,
+        "price": 130,
+        "purchaseId": "660123456789abcdef654321",
+        "billingCardId": "65ffeae61ddc14edac3c2444",
+        "totalAmount": 130,
+        "purchaseDate": "2024-11-25T07:30:00.000Z",
+        "userId": "65f1d1d6a8a3f2b3c3f9e7b2"
       }
     ]
   }
@@ -1037,17 +1026,19 @@ All wishlist operations require the user to be authenticated. The `userId` is au
 
   ```json
   {
-    "purchase": {
-      "_id": "660123456789abcdef123456",
-      "userId": "65f1d1d6a8a3f2b3c3f9e7b2",
+    "ticket": {
       "eventId": "1A9ZkkeGkd1Zepn",
-      "eventName": "Eagles Live at the Sphere",
-      "eventDate": "2025-04-04",
-      "eventImage": "https://someimage.com/eagles.jpg",
-      "eventVenue": "Sphere",
+      "eventName": "Coldplay Live",
+      "eventDate": "2025-06-01",
+      "eventVenue": "Wembley Stadium",
+      "eventImage": "https://someimage.com/coldplay.jpg",
+      "quantity": 2,
+      "price": 180,
+      "purchaseId": "660123456789abcdef123456",
       "billingCardId": "65ffeae61ddc14edac3c2444",
-      "purchaseDate": "2025-03-22T05:21:00.000Z",
-      "price": 130
+      "totalAmount": 360,
+      "purchaseDate": "2025-04-02T08:45:00.000Z",
+      "userId": "65f1d1d6a8a3f2b3c3f9e7b2"
     }
   }
   ```
@@ -1233,6 +1224,184 @@ All wishlist operations require the user to be authenticated. The `userId` is au
 
 📌 **Note:**  
 All cart operations require the user to be authenticated. The `userId` is automatically extracted from the JWT token and does not need to be provided manually in the request body.
+
+---
+
+## 📌 1️⃣6️⃣ User Reviews (Requires Authentication)
+
+---
+
+### 🔹 `POST /review`
+
+- **Description:**  
+  Allows an authenticated user to submit a review for an event.  
+  The review will be pending approval before it's visible to the public.
+
+- **Headers**
+
+  - `Authorization: Bearer YOUR_JWT_TOKEN`
+
+- **Request Body (JSON)**
+
+  ```json
+  {
+    "eventId": "1A9ZkkeGkd1Zepn",
+    "content": "Amazing concert! The atmosphere was electric!",
+    "rating": 5,
+    "userName": "Sangkwon"
+  }
+  ```
+
+- **Success Response**
+
+  ```json
+  {
+    "message": "Review submitted and pending approval",
+    "review": {
+      "_id": "660abcd12345ef67890abcde",
+      "userId": "65f1d1d6a8a3f2b3c3f9e7b2",
+      "eventId": "1A9ZkkeGkd1Zepn",
+      "content": "Amazing concert! The atmosphere was electric!",
+      "rating": 5,
+      "userName": "Sangkwon",
+      "approved": false,
+      "createdAt": "2025-04-02T10:30:00.000Z"
+    }
+  }
+  ```
+
+---
+
+### 🔹 `GET /review/:eventId`
+
+- **Description:**  
+  Retrieves all approved reviews for a specific event.
+
+- **Success Response**
+
+  ```json
+  {
+    "reviews": [
+      {
+        "_id": "660abcd12345ef67890abcde",
+        "eventId": "1A9ZkkeGkd1Zepn",
+        "userName": "Sangkwon",
+        "rating": 5,
+        "content": "Amazing concert! The atmosphere was electric!",
+        "approved": true,
+        "createdAt": "2025-04-02T10:30:00.000Z"
+      }
+    ]
+  }
+  ```
+
+---
+
+### 🔹 `PUT /review/:id` – Edit Review
+
+- **Description:**  
+  Allows user to update their review. Re-approval will be needed after changes.
+
+- **Request Body**
+
+  ```json
+  {
+    "content": "Actually, it was even better than I thought!",
+    "rating": 4
+  }
+  ```
+
+- **Success Response**
+
+  ```json
+  {
+    "message": "Review updated and pending re-approval",
+    "review": {
+      "_id": "660abcd12345ef67890abcde",
+      "eventId": "1A9ZkkeGkd1Zepn",
+      "content": "Actually, it was even better than I thought!",
+      "rating": 4,
+      "approved": false
+    }
+  }
+  ```
+
+---
+
+### 🔹 `DELETE /review/:id` – Delete Review
+
+- **Description:**  
+  Authenticated user can delete their review.
+
+- **Success Response**
+
+  ```json
+  {
+    "message": "Review deleted successfully"
+  }
+  ```
+
+---
+
+## 📌 1️⃣7️⃣ Admin Review Management (Requires Admin JWT)
+
+---
+
+### 🔹 `GET /admin/reviews/pending`
+
+- **Description:**  
+  Admin-only route to fetch all reviews that are pending approval.
+
+- **Headers**
+
+  - `Authorization: Bearer ADMIN_JWT_TOKEN`
+
+- **Success Response**
+
+  ```json
+  {
+    "pendingReviews": [
+      {
+        "_id": "660abcd12345ef67890abcde",
+        "eventId": "1A9ZkkeGkd1Zepn",
+        "userName": "test1",
+        "content": "Awesome concert!",
+        "rating": 5,
+        "createdAt": "2025-04-02T10:30:00.000Z"
+      }
+    ]
+  }
+  ```
+
+---
+
+### 🔹 `POST /admin/reviews/:id/approve`
+
+- **Description:**  
+  Approves a user review to be publicly visible.
+
+- **Success Response**
+
+  ```json
+  {
+    "message": "Review approved successfully"
+  }
+  ```
+
+---
+
+### 🔹 `DELETE /admin/reviews/:id/decline`
+
+- **Description:**  
+  Deletes a review if it is not appropriate or does not meet criteria.
+
+- **Success Response**
+
+  ```json
+  {
+    "message": "Review declined and deleted"
+  }
+  ```
 
 ---
 
