@@ -16,6 +16,7 @@ import myTicketRoutes from "./ports/rest/routes/myTicket";
 import cartRoutes from "./ports/rest/routes/cart";
 import reviewRoutes from "./ports/rest/routes/review";
 import adminReviewRoutes from "./ports/rest/routes/admin/reviewManagement";
+import guestRouters from "./ports/rest/routes/guestPurchase";
 
 const app = express();
 
@@ -48,7 +49,9 @@ app.use("/purchase", purchaseRoutes);
 app.use("/myTicket", myTicketRoutes);
 app.use("/cart", cartRoutes);
 app.use("/review", reviewRoutes);
-app.use("/admin/reviews",adminReviewRoutes)
+app.use("/admin/reviews",adminReviewRoutes);
+app.use("/guest", guestRouters)
+
 
 const port = 4000;
 
