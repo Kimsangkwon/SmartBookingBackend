@@ -1423,6 +1423,8 @@ MONGO_PORT=27017
 MONGO_DATABASE=SmartBookingDatabase
 SECRET_KEY=your_secret_key
 EVENT_API_KEY=your_ticketmaster_api_key
+ADMIN_EMAIL=admin@admin.com
+ADMIN_PASSWORD=Admin123!
 ```
 
 ✅ **Ensure these environment variables are set in `.env.local` for the project to function properly.**

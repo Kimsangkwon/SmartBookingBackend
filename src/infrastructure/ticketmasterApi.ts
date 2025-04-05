@@ -25,8 +25,8 @@ export const fetchEventsByUserSearchInputs = async (
         }
 
         if (date) {
-            const startDateTime = new Date(date).toISOString();
-            const endDateTime = new Date(new Date(date).setDate(new Date(date).getDate() + 1)).toISOString();
+            const startDateTime = `${date}T00:00:00Z`;
+            const endDateTime = `${date}T23:59:59Z`;
             params.startDateTime = startDateTime;
             params.endDateTime = endDateTime;
         }
