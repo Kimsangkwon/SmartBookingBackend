@@ -28,6 +28,11 @@ export const getPendingReviews = async () => {
   return await ReviewModel.find({ approved: false }).sort({ createdAt: -1 });
 };
 
+//Get all approved reviews
+export const getAppApprovedReviews = async()=>{
+  return await ReviewModel.find({approved:true}).sort({createdAt:-1});
+}
+
 // Approve a review by admin
 export const approveReviewById = async (reviewId: string) => {
   return await ReviewModel.findByIdAndUpdate(
