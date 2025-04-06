@@ -59,3 +59,21 @@ export const saveUserProfile = async (userId: string, profileData: any) => {
         return { message: "Profile created successfully", profile };
     }
 };
+
+export const getAllUsersWithProfiles = async () => {
+    const users = await User.find({});
+  
+    const mergedUsers = await Promise.all(
+      users.map(async (user) => {
+        const profile = await UserProfile.findOne({ userId: user._id });
+        return {
+          _id: user._id,
+          email: user.email,
+          createdAt: user.createdAt,
+          profile: profile || null,
+        };
+      })
+    );
+  
+    return mergedUsers;
+  };
