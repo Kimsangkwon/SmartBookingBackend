@@ -5,24 +5,6 @@ import { createPurchase } from "../../../infrastructure/mongodb/queries/guestPur
 
 const router = Router();
 
-router.post("/send-verification", async (req, res) => {
-  const { email } = req.body;
-
-  try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Ticketing Email Confirmation",
-      text: `Your email ${email} was successfully entered for guest checkout.\n\nEnjoy your event!`,
-    });
-
-    res.status(200).json({ message: "Verification email sent for testing." });
-  } catch (error) {
-    console.error("Error sending guest email verification:", error);
-    res.status(500).json({ error: "Failed to send email." });
-  }
-});
-
 router.post("/purchase", async (req: Request, res: Response) => {
   try {
     const {
