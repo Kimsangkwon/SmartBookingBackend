@@ -8,7 +8,7 @@ const router = Router();
 //get all purchases from all users
 router.get("/", authenticateToken, isAdmin, async (req: Request, res: Response) => {
     try {
-      const userPurchases = await PurchaseModel.find({});
+      const userPurchases = await PurchaseModel.find({}).populate("userId", "email");
       const guestPurchases = await GuestPurchaseModel.find({});
   
       res.status(200).json({
