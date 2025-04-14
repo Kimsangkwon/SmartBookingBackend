@@ -29,6 +29,8 @@ export const fetchEventsByUserSearchInputs = async (
             const endDateTime = `${date}T23:59:59Z`;
             params.startDateTime = startDateTime;
             params.endDateTime = endDateTime;
+            console.log("input: ", startDateTime)
+
         }
 
         if (keyword) {
@@ -46,12 +48,20 @@ export const fetchEventsByUserSearchInputs = async (
 
 export const fetchEventsByCategory = async (category: string, size: number = 6) => {
     try {
+        const now = new Date();
+        const oneYearLater = new Date(now);
+        oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+        const nowDateOnly = now.toISOString().split("T")[0];
+        const oneYearLaterDateOnly = oneYearLater.toISOString().split("T")[0];
         const params: any = {
             apikey: config.event_api,
             size: size,
+            startDateTime: `${nowDateOnly}T00:00:00Z`,
+            endDateTime: `${oneYearLaterDateOnly}T23:59:59Z`,
             sort: "date,asc", // Sort events by date in ascending order
             classificationName: category, // Event classification (category)
         };
+        console.log("now", now)
 
         const response = await axios.get(BASE_URL, { params });
         return response.data._embedded?.events || [];
@@ -62,7 +72,7 @@ export const fetchEventsByCategory = async (category: string, size: number = 6) 
 };
 
 
-export const fetchMostViewedEvents = async (classificationName?:string, size?:number) => {
+export const fetchMostViewedEvents = async (classificationName?: string, size?: number) => {
     try {
         const params: any = {
             apikey: config.event_api,
@@ -136,7 +146,7 @@ export const fetchSports = async (city?: string, startDate?: string, endDate?: s
     }
 };
 
-export const fetchOthers = async ( city?: string, startDate?: string, endDate?: string, classificationName?: string, keyword?: string,) => {
+export const fetchOthers = async (city?: string, startDate?: string, endDate?: string, classificationName?: string, keyword?: string,) => {
     try {
         const params: any = {
             apikey: config.event_api,
@@ -151,7 +161,7 @@ export const fetchOthers = async ( city?: string, startDate?: string, endDate?: 
             params.classificationName = classificationName;
         } else {
             params.classificationName = "Arts & Theatre,Film,Family,Comedy,Fairs & Festivals";
-        }        if (keyword) params.keyword = keyword;
+        } if (keyword) params.keyword = keyword;
 
         const response = await axios.get(BASE_URL, { params });
         return response.data._embedded?.events || [];
@@ -162,7 +172,7 @@ export const fetchOthers = async ( city?: string, startDate?: string, endDate?: 
 };
 
 
-export const fetchEventDetail = async(eventId : any)=> {
+export const fetchEventDetail = async (eventId: any) => {
     try {
         const response = await axios.get(`${BASE_URL}/${eventId}`, {
             params: { apikey: config.event_api },
