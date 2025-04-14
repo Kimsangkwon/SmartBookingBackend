@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv-safe";
 import cors from "cors";
 import dependencies from "./infrastructure/dependencies";
-import userRoutes, { search } from "./ports/rest/routes/user";
+import userRoutes from "./ports/rest/routes/user";
 import searchRoutes from "./ports/rest/routes/search";
 import homeRoutes from "./ports/rest/routes/home";
 import concertRoutes from "./ports/rest/routes/concerts";
@@ -13,6 +13,16 @@ import wishlistRoutes from "./ports/rest/routes/wishlist";
 import billingRoutes from "./ports/rest/routes/billing";
 import purchaseRoutes from "./ports/rest/routes/purchase";
 import myTicketRoutes from "./ports/rest/routes/myTicket";
+import cartRoutes from "./ports/rest/routes/cart";
+import reviewRoutes from "./ports/rest/routes/review";
+import adminReviewRoutes from "./ports/rest/routes/admin/reviewManagement";
+import guestRouters from "./ports/rest/routes/guestPurchase";
+import adminAllPurchasesRoutes from "./ports/rest/routes/admin/allPurchases";
+import adminAllUsersRoutes from "./ports/rest/routes/admin/allUsers";
+import allPurchasesRouter from "./ports/rest/routes/admin/allPurchases";
+import allUsersRouter from "./ports/rest/routes/admin/allUsers";
+import reviewManagementRouter from "./ports/rest/routes/admin/reviewManagement";
+
 
 const app = express();
 
@@ -26,17 +36,10 @@ app.use(cors({
 }));
 app.use(express.json());
 
-if (process.env.NODE_ENV === "test") {
-  dotenv.config({ path: ".env.test" });
-} else {
-  dotenv.config();
-}
+dotenv.config();
 
-// Database Connection
-const { mongoDbClient } = dependencies;
-if (process.env.NODE_ENV !== "test") {
-  mongoDbClient.ConnectToDb();
-}
+const {mongoDbClient} = dependencies;
+mongoDbClient.ConnectToDb();
 
 // Routes
 app.use("/user", userRoutes);
@@ -50,14 +53,22 @@ app.use("/wishlist", wishlistRoutes);
 app.use("/billing", billingRoutes);
 app.use("/purchase", purchaseRoutes);
 app.use("/myTicket", myTicketRoutes);
+app.use("/cart", cartRoutes);
+app.use("/review", reviewRoutes);
+app.use("/admin/reviews",adminReviewRoutes);
+app.use("/guest", guestRouters);
+app.use("/admin/allPurchases", adminAllPurchasesRoutes);
+app.use("/admin/allUsers",adminAllUsersRoutes );
+app.use("/admin/purchases", allPurchasesRouter);
+app.use("/admin/users", allUsersRouter);
+app.use("/admin/reviews", reviewManagementRouter);
 
-// Start server only if not in test mode
-if (process.env.NODE_ENV !== "test") {
-  const port = 4000;
-  app.listen(port, () => {
-    console.log(`Now listening on port ${port}`);
-  });
-}
 
-// Export `app` for testing
+
+const port = 4000;
+
+app.listen(port, () => {
+  console.log(`Now listening on port ${port}`);
+});
+
 export default app;

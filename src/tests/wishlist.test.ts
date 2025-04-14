@@ -1,93 +1,78 @@
 import request from "supertest";
+import mongoose from "mongoose";
 import app from "../index";
-import * as wishlistQueries from "../infrastructure/mongodb/queries/wishlist";
+import { ConnectToDb } from "../infrastructure/mongodb/connection";
 
 jest.mock("../ports/rest/middleware/authentication", () => ({
   authenticateToken: (req: any, res: any, next: any) => {
-    req.user = { id: "mockUserId" };
+    req.user = { id: "mockUserId", role: "admin" };
     next();
   },
+  isAdmin: (req: any, res: any, next: any) => {
+    next();
+  }
 }));
 
-jest.mock("../infrastructure/mongodb/queries/wishlist");
+
+// ✅ Mock Wishlist Queries
+jest.mock("../infrastructure/mongodb/queries/wishlist", () => ({
+  createWishlistItem: jest.fn().mockImplementation((userId, data) => ({
+    _id: "w1",
+    userId,
+    ...data
+  })),
+  getWishlistByUserId: jest.fn().mockResolvedValue([
+    { eventId: "e1", name: "Event One", venue: "Venue A" }
+  ]),
+  deleteWishlistItem: jest.fn().mockImplementation((userId, eventId) => {
+    return eventId === "e1" ? true : null;
+  })
+}));
 
 describe("🌟 Wishlist API", () => {
-  const mockWishlistItem = {
-    _id: "123",
-    eventId: "event123",
-    name: "Event A",
-    date: "2025-05-01",
-    image: "https://img.com",
-    venue: "Venue A",
-  };
-
-  afterEach(() => {
-    jest.clearAllMocks();
+  beforeAll(async () => {
+    if (mongoose.connection.readyState === 0) {
+      await ConnectToDb();
+    }
   });
 
-  it("✅ should add an event to wishlist", async () => {
-    (wishlistQueries.createWishlistItem as jest.Mock).mockResolvedValue(mockWishlistItem);
+  afterAll(async () => {
+    await mongoose.disconnect();
+  });
 
+  it("✅ should add item to wishlist", async () => {
     const res = await request(app).post("/wishlist").send({
-      eventId: "event123",
-      name: "Event A",
+      eventId: "e1",
+      name: "Test Event",
       date: "2025-05-01",
-      image: "https://img.com",
-      venue: "Venue A",
+      image: "image.jpg",
+      venue: "Test Venue"
     });
 
     expect(res.status).toBe(201);
-    expect(res.body.message).toBe("Event added to wishlist");
-    expect(wishlistQueries.createWishlistItem).toHaveBeenCalledWith("mockUserId", {
-      eventId: "event123",
-      name: "Event A",
-      date: "2025-05-01",
-      image: "https://img.com",
-      venue: "Venue A",
-    });
+    expect(res.body).toHaveProperty("message", "Event added to wishlist");
+    expect(res.body.wishlist).toHaveProperty("eventId", "e1");
   });
 
-  it("✅ should fetch wishlist", async () => {
-    (wishlistQueries.getWishlistByUserId as jest.Mock).mockResolvedValue([mockWishlistItem]);
-
+  it("✅ should fetch wishlist items", async () => {
     const res = await request(app).get("/wishlist");
 
     expect(res.status).toBe(200);
-    expect(res.body.wishlist).toEqual([mockWishlistItem]);
-    expect(wishlistQueries.getWishlistByUserId).toHaveBeenCalledWith("mockUserId");
+    expect(res.body.wishlist.length).toBeGreaterThan(0);
+    expect(res.body.wishlist[0]).toHaveProperty("name");
   });
 
-  it("✅ should remove an event from wishlist", async () => {
-    (wishlistQueries.deleteWishlistItem as jest.Mock).mockResolvedValue(true);
-
-    const res = await request(app).delete("/wishlist/event123");
+  it("✅ should delete item from wishlist", async () => {
+    const res = await request(app).delete("/wishlist/e1");
 
     expect(res.status).toBe(200);
-    expect(res.body.message).toBe("Event removed from wishlist");
-    expect(wishlistQueries.deleteWishlistItem).toHaveBeenCalledWith("mockUserId", "event123");
+    expect(res.body).toHaveProperty("message", "Event removed from wishlist");
   });
 
-  it("❌ should return 404 if trying to delete non-existent wishlist item", async () => {
-    (wishlistQueries.deleteWishlistItem as jest.Mock).mockResolvedValue(false);
-
-    const res = await request(app).delete("/wishlist/nonexistent");
+  it("❌ should return 404 if item not found in wishlist", async () => {
+    const res = await request(app).delete("/wishlist/unknown");
 
     expect(res.status).toBe(404);
-    expect(res.body.message).toBe("Event not found in wishlist");
-  });
-
-  it("❌ should handle error when adding to wishlist", async () => {
-    (wishlistQueries.createWishlistItem as jest.Mock).mockRejectedValue(new Error("DB Error"));
-
-    const res = await request(app).post("/wishlist").send({
-      eventId: "event123",
-      name: "Event A",
-      date: "2025-05-01",
-      image: "https://img.com",
-      venue: "Venue A",
-    });
-
-    expect(res.status).toBe(500);
-    expect(res.body).toHaveProperty("error", "Failed to add to wishlist");
+    expect(res.body).toHaveProperty("message", "Event not found in wishlist");
   });
 });

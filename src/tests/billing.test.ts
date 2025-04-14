@@ -3,24 +3,29 @@ import mongoose from "mongoose";
 import app from "../index";
 import { ConnectToDb } from "../infrastructure/mongodb/connection";
 
-// Setup mock token auth (bypass actual JWT)
 jest.mock("../ports/rest/middleware/authentication", () => ({
   authenticateToken: (req: any, res: any, next: any) => {
-    req.user = { id: "mockUserId" };
+    req.user = { id: "mockUserId", role: "admin" };
+    next();
+  },
+  isAdmin: (req: any, res: any, next: any) => {
     next();
   }
 }));
 
+// ✅ Mock billing queries
 jest.mock("../infrastructure/mongodb/queries/billing", () => ({
   createBillingInfo: jest.fn().mockResolvedValue({ id: "1", cardNumber: "1234567890123456" }),
-  getBillingInfosByUserId: jest.fn().mockResolvedValue([{ id: "1", cardNumber: "1234567890123456" }]),
-  getBillingInfoById: jest.fn().mockImplementation((userId, id) => {
-    return id === "1" ? { id, cardNumber: "1234567890123456" } : null;
-  }),
-  updateBillingInfo: jest.fn().mockImplementation((userId, id, data) => {
-    return id === "1" ? { id, ...data } : null;
-  }),
-  deleteBillingInfo: jest.fn().mockImplementation((userId, id) => id === "1"),
+  getBillingInfosByUserId: jest.fn().mockResolvedValue([
+    { id: "1", cardNumber: "1234567890123456" }
+  ]),
+  getBillingInfoById: jest.fn().mockImplementation((userId, id) =>
+    id === "1" ? { id, cardNumber: "1234567890123456" } : null
+  ),
+  updateBillingInfo: jest.fn().mockImplementation((userId, id, data) =>
+    id === "1" ? { id, ...data } : null
+  ),
+  deleteBillingInfo: jest.fn().mockImplementation((userId, id) => id === "1")
 }));
 
 describe("💳 Billing API", () => {
@@ -35,9 +40,10 @@ describe("💳 Billing API", () => {
   });
 
   it("✅ should add billing info", async () => {
-    const res = await request(app)
-      .post("/billing")
-      .send({ cardNumber: "1234567890123456", name: "John Doe" });
+    const res = await request(app).post("/billing").send({
+      cardNumber: "1234567890123456",
+      name: "John Doe"
+    });
 
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty("message", "Billing info added");
@@ -66,9 +72,7 @@ describe("💳 Billing API", () => {
   });
 
   it("✅ should update billing info", async () => {
-    const res = await request(app)
-      .put("/billing/1")
-      .send({ cardNumber: "9999888877776666" });
+    const res = await request(app).put("/billing/1").send({ cardNumber: "9999888877776666" });
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty("message", "Billing info updated");
@@ -76,11 +80,10 @@ describe("💳 Billing API", () => {
   });
 
   it("❌ should return 404 when updating non-existent billing info", async () => {
-    const res = await request(app)
-      .put("/billing/999")
-      .send({ cardNumber: "0000111122223333" });
+    const res = await request(app).put("/billing/999").send({ cardNumber: "0000111122223333" });
 
     expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("message", "Billing info not found");
   });
 
   it("✅ should delete billing info", async () => {
@@ -94,5 +97,6 @@ describe("💳 Billing API", () => {
     const res = await request(app).delete("/billing/999");
 
     expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("message", "Billing info not found");
   });
 });
